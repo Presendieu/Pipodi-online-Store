@@ -1,444 +1,143 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pipodi</title>
-    <link rel="stylesheet" href="styles.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-      referrerpolicy="no-referrer"
-    />
-    <link
-      rel="stylesheet"
-      href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
-    />
+    <title>Pipodi Store – Mode, chaussures et électronique livrées en Haïti</title>
+    <meta name="description" content="Pipodi Store : votre boutique en ligne en Haïti. Chaussures, vêtements, accessoires et électronique des plus grandes marques, commandés pour vous et livrés chez vous." />
+    <meta property="og:title" content="Pipodi Store" />
+    <meta property="og:description" content="Mode, chaussures, accessoires et électronique livrés partout en Haïti." />
+    <meta property="og:image" content="img/logo.png" />
+    <meta name="theme-color" content="#0b4a5e" />
+    <link rel="icon" href="img/logo.png" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+    <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
-    <section id="header">
-      <img src="img/logo.png" class="logo" alt="logo" width="200" height="100" />
+  <body data-page="home">
+    <header id="site-header"></header>
 
-      <div>
-        <ul id="navbar">
-          <li><a class="active" href="index.html">Home</a></li>
-          <li><a href="shop.html">Shop</a></li>
-          <li><a href="blog.html">Blog</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="contact.html">Contact</a></li>
-          <li id="lg-bag">
-            <a href="cart.html"
-              ><i class="fa fa-shopping-bag" aria-hidden="true"></i>
-            </a>
-          </li>
-          <a href="#" id="close"><i class="far fa-times"></i></a>
-        </ul>
-      </div>
-      <div id="mobile">
-        <a href="cart.html"><i class="far fa-shopping-bag"></i></a
-        ><i id="bar" class="fas fa-outdent"></i>
-      </div>
-    </section>
-    <section id="hero">
-      <p>The best place to shopping!</p>
-      <h2>Super value deals</h2>
-      <h1>On all products</h1>
-      
-      <button>Shop Now</button>
-    </section>
-    <section id="feature" class="section-p1">
-      <div class="fe-box">
-        <img src="img/Zara Branding.jpg" alt="feature4" />
-        <h6>Zara</h6>
-      </div>
-      <div class="fe-box">
-        <img src="img/Romwe.jpg" alt="feature2" />
-        <h6>Romwe</h6>
-      </div>
-      <div class="fe-box">
-        <img src="img/Alibaba.jpg" alt="feature3" />
-        <h6>Alibaba</h6>
-      </div>
-      <div class="fe-box">
-        <img src="img/Ebay.jpg" alt="feature4" />
-        <h6>Ebay</h6>
-      </div>
-      <div class="fe-box">
-        <img src="img/Shein Logo.jpg" alt="feature5" />
-        <h6>Shein</h6>
-      </div>
-      <div class="fe-box">
-        <img src="img/Amazon.jpg" alt="feature6" />
-        <h6>Amazon</h6>
-      </div>
-    </section>
-    <section id="product1" class="section-p1">
-      <h2>Featured Products</h2>
-      <p>Summer Collection New Modern Design</p>
-      <div class="pro-container">
-        <div class="pro">
-          <img src="img/sandale.jpg" alt="" />
-          <div class="des">
-            <span>Shein</span>
-            <h5>women's sandal</h5>
-            <div class="star">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
+    <main>
+      <section class="hero">
+        <div class="container">
+          <div class="hero-content reveal">
+            <span class="eyebrow">Nouvelle collection</span>
+            <h1>Le style que vous aimez, <span class="accent">livré chez vous.</span></h1>
+            <p>Chaussures, vêtements, accessoires et électronique des marques que vous aimez. Commandez en quelques clics, on s'occupe du reste.</p>
+            <div class="hero-actions">
+              <a href="shop.html" class="btn btn-primary">Découvrir la boutique <i class="fa-solid fa-arrow-right"></i></a>
+              <a href="#nouveautes" class="btn btn-outline">Nouveautés</a>
             </div>
-            <h4>$78</h4>
           </div>
-          <a href="#"><i class="fal fa-shopping-cart cart"></i></a>
         </div>
-        <div class="pro">
-          <img src="img/Nike shoes.jpg" alt="" />
-          <div class="des">
-            <span>Romwe</span>
-            <h5>Nike Shoes</h5>
-            <div class="star">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </div>
-            <h4>$78</h4>
-          </div>
-          <a href="#"><i class="fal fa-shopping-cart cart"></i></a>
-        </div>
-        <div class="pro">
-          <img src="img/Iphone.jpg" alt="" />
-          <div class="des">
-            <span>Alibaba</span>
-            <h5>Iphone cover</h5>
-            <div class="star">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </div>
-            <h4>$78</h4>
-          </div>
-          <a href="#"><i class="fal fa-shopping-cart cart"></i></a>
-        </div>
-        <div class="pro">
-          <img src="img/APPLE AirPods Max Argent - Casque.jpg" alt="" />
-          <div class="des">
-            <span>Amazone</span>
-            <h5>Apple airpods</h5>
-            <div class="star">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </div>
-            <h4>$78</h4>
-          </div>
-          <a href="#"><i class="fal fa-shopping-cart cart"></i></a>
-        </div>
-        <div class="pro">
-          <img src="img/woman t-shirts.jpg" alt="" />
-          <div class="des">
-            <span>adidas</span>
-            <h5>Woman t-shirt</h5>
-            <div class="star">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </div>
-            <h4>$78</h4>
-          </div>
-          <a href="#"><i class="fal fa-shopping-cart cart"></i></a>
-        </div>
-        <div class="pro">
-          <img src="img/Zara Sandal.jpg" alt="" />
-          <div class="des">
-            <span>Zara</span>
-            <h5>Zara sandal</h5>
-            <div class="star">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </div>
-            <h4>$78</h4>
-          </div>
-          <a href="#"><i class="fal fa-shopping-cart cart"></i></a>
-        </div>
-        <div class="pro">
-          <img src="img/Sandal kids.jpg" alt="" />
-          <div class="des">
-            <span>Ebay</span>
-            <h5>child sandal</h5>
-            <div class="star">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </div>
-            <h4>$78</h4>
-          </div>
-          <a href="#"><i class="fal fa-shopping-cart cart"></i></a>
-        </div>
-        <div class="pro">
-          <img src="img/Vinted chapeau.jpg" alt="" />
-          <div class="des">
-            <span>Vinted</span>
-            <h5>Vinted chapeau</h5>
-            <div class="star">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </div>
-            <h4>$78</h4>
-          </div>
-          <a href="#"><i class="fal fa-shopping-cart cart"></i></a>
+      </section>
+
+      <div class="container">
+        <div class="perks">
+          <div class="perk reveal"><i class="fa-solid fa-truck-fast"></i><div><strong>Livraison</strong><span>Partout en Haïti</span></div></div>
+          <div class="perk reveal"><i class="fa-solid fa-shield-halved"></i><div><strong>Qualité vérifiée</strong><span>Avant chaque livraison</span></div></div>
+          <div class="perk reveal"><i class="fa-solid fa-mobile-screen"></i><div><strong>Paiement simple</strong><span>Mobile ou espèces</span></div></div>
+          <div class="perk reveal"><i class="fa-brands fa-whatsapp"></i><div><strong>Support WhatsApp</strong><span>Réponse rapide</span></div></div>
         </div>
       </div>
-    </section>
-    <section id="banner" class="section-m1">
-      <h4>Repair Services</h4>
-      <h2>Up to <span>70% Off</span> - All t-Shirts & Accessories</h2>
-      <button class="normal">Explore More</button>
-    </section>
-    <section id="product1" class="section-p1" alt="New-Arrivals">
-      <h2>New Arrivals</h2>
-      <p>Summer Collection New Modern Design</p>
-      <div class="pro-container">
-        <div class="pro">
-          <img src="img/White Yeezy.jpg" alt="" />
-          <div class="des">
-            <span>adidas</span>
-            <h5>White Yeezy 750</h5>
-            <div class="star">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
+
+      <section class="section container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Catégories</span>
+            <h2>Achetez par catégorie</h2>
+          </div>
+          <a href="shop.html" class="link-arrow">Tout voir <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+        <div class="categories">
+          <a href="shop.html?cat=chaussures" class="category reveal">
+            <img src="img/Nike.jpg" alt="" loading="lazy" />
+            <div><h3>Chaussures</h3><span>Sneakers, sandales…</span></div>
+          </a>
+          <a href="shop.html?cat=vetements" class="category reveal">
+            <img src="img/banner/b10.jpg" alt="" loading="lazy" />
+            <div><h3>Vêtements</h3><span>T-shirts, chemises, vestes</span></div>
+          </a>
+          <a href="shop.html?cat=accessoires" class="category reveal">
+            <img src="img/banner/b7.jpg" alt="" loading="lazy" />
+            <div><h3>Accessoires</h3><span>Sacs, bijoux, coques</span></div>
+          </a>
+          <a href="shop.html?cat=electronique" class="category reveal">
+            <img src="img/APPLE%20AirPods%20Max%20Argent%20-%20Casque.jpg" alt="" loading="lazy" />
+            <div><h3>Électronique</h3><span>Audio, chargeurs, PC</span></div>
+          </a>
+        </div>
+      </section>
+
+      <section class="section section-soft">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Sélection</span>
+              <h2>Produits vedettes</h2>
+              <p>Les incontournables du moment, choisis pour vous.</p>
             </div>
-            <h4>$78</h4>
+            <a href="shop.html" class="link-arrow">Voir la boutique <i class="fa-solid fa-arrow-right"></i></a>
           </div>
-          <a href="#"><i class="fal fa-shopping-cart cart"></i></a>
+          <div class="product-grid product-row" data-products="featured" data-limit="8"></div>
         </div>
-        <div class="pro">
-          <img src="img/Nike.jpg" alt="" />
-          <div class="des">
-            <span>Nike</span>
-            <h5>Nike Black and White</h5>
-            <div class="star">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
+      </section>
+
+      <section class="section container">
+        <div class="promo reveal">
+          <div class="promo-content">
+            <span class="eyebrow">Service de commande</span>
+            <h2>Vous avez vu un article sur Shein, Amazon ou Zara ?</h2>
+            <p>Envoyez-nous le lien : nous le commandons pour vous et vous le livrons en Haïti. Simple, rapide et sans carte bancaire internationale.</p>
+            <a href="https://wa.me/50948262051?text=Bonjour%2C%20je%20voudrais%20commander%20cet%20article%20%3A%20" target="_blank" rel="noopener" class="btn btn-light"><i class="fa-brands fa-whatsapp"></i> Envoyer un lien</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section container" id="nouveautes">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Tout juste arrivés</span>
+            <h2>Nouveautés</h2>
+          </div>
+          <a href="shop.html" class="link-arrow">Tout voir <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+        <div class="product-grid product-row" data-products="new" data-limit="8"></div>
+      </section>
+
+      <section class="section section-soft">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Nos sources</span>
+              <h2>Nous commandons sur les plus grandes plateformes</h2>
             </div>
-            <h4>$78</h4>
-          </div>
-          <a href="#"><i class="fal fa-shopping-cart cart"></i></a>
-        </div>
-        <div class="pro">
-          <img src="img/bag.jpg" alt="" />
-          <div class="des">
-            <span>kate Spade</span>
-            <h5>Black Kate spade</h5>
-            <div class="star">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </div>
-            <h4>$78</h4>
-          </div>
-          <a href="#"><i class="fal fa-shopping-cart cart"></i></a>
-        </div>
-        <div class="pro">
-          <img src="img/Fendi T-shirt In Nero _ ModeSens.jpg" alt="" />
-          <div class="des">
-            <span>Fendi</span>
-            <h5> Black Fendi T-Shirt </h5>
-            <div class="star">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </div>
-            <h4>$78</h4>
-          </div>
-          <a href="#"><i class="fal fa-shopping-cart cart"></i></a>
-        </div>
-        <div class="pro">
-          <img src="img/Bap.jpg" alt="" />
-          <div class="des">
-            <span>BAP</span>
-            <h5>Cartoon Astronaut T-Shirts</h5>
-            <div class="star">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </div>
-            <h4>$78</h4>
-          </div>
-          <a href="#"><i class="fal fa-shopping-cart cart"></i></a>
-        </div>
-        <div class="pro">
-          <img src="img/Bracelets.jpg" alt="" />
-          <div class="des">
-            <span>Bracelets</span>
-            <h5>Woman pearls Bracelets</h5>
-            <div class="star">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </div>
-            <h4>$78</h4>
-          </div>
-          <a href="#"><i class="fal fa-shopping-cart cart"></i></a>
-        </div>
-        <div class="pro">
-          <img src="img/products/n7.jpg" alt="" />
-          <div class="des">
-            <span>adidas</span>
-            <h5>Cartoon Astronaut T-Shirts</h5>
-            <div class="star">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </div>
-            <h4>$78</h4>
-          </div>
-          <a href="#"><i class="fal fa-shopping-cart cart"></i></a>
-        </div>
-        <div class="pro">
-          <img src="img/products/n8.jpg" alt="" />
-          <div class="des">
-            <span>adidas</span>
-            <h5>Cartoon Astronaut T-Shirts</h5>
-            <div class="star">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </div>
-            <h4>$78</h4>
-          </div>
-          <a href="#"><i class="fal fa-shopping-cart cart"></i></a>
-        </div>
-      </div>
-    </section>
-    <section id="sm-banner" class="section-p1">
-      <div class="banner-box">
-        <h4>crazy deals</h4>
-        <h2>buy 1 get 1 free</h2>
-        <span>The best classic dresses are on sale at cara</span>
-        <button class="white">Learn More</button>
-      </div>
-      <div class="banner-box banner-box2">
-        <h4>spring/summer</h4>
-        <h2>upcoming season</h2>
-        <span>Style for the heat</span>
-        <button class="white">Collection</button>
-      </div>
-    </section>
-    <section id="banner3">
-      <div class="banner-box">
-        <h2>NEW FOOTWEAR COLLECTION</h2>
-        <h3>Spring/Summer 2023</h3>
-      </div>
-      <div class="banner-box banner-box2">
-        <h2>SEASONAL SALE</h2>
-        <h3>Winter Collection -50% OFF</h3>
-      </div>
-      <div class="banner-box banner-box3">
-        <h2>T-SHIRTS</h2>
-        <h3>New Trendy Prints</h3>
-      </div>
-    </section>
-    <section id="newsletter" class="section-p1 section-m1">
-      <div class="newstext">
-        <h4>Sign Up For Newsletters</h4>
-        <p>
-          Get E-mail updates about our latest shop and
-          <span>special offers.</span>
-        </p>
-      </div>
-      <div class="form">
-        <input type="text" placeholder="Your email address" />
-        <button class="normal">Sign Up</button>
-      </div>
-    </section>
-    <footer class="section-p1">
-      <div class="col">
-        <img class="logo" src="img/logo.png" />
-        <h4>Contact</h4>
-        <p>
-          <strong>Address:</strong> Routes de Freres, Puits-Blain 24
-        </p>
-        <p><strong>Phone</strong> +509 4826-2051</p>
-        <p><strong>Hours:</strong> 08:00 - 17:00, Mon - Sat</p>
-        <div class="follow">
-          <h4>Follow Us</h4>
-          <div class="icon">
-            <i class="fab fa-facebook-f"></i>
-            <i class="fab fa-twitter"></i>
-            <i class="fab fa-instagram"></i>
-            <i class="fab fa-pinterest-p"></i>
-            <i class="fab fa-youtube"></i>
           </div>
         </div>
-      </div>
-      <div class="col">
-        <h4>About</h4>
-        <a href="#">About Us</a>
-        <a href="#">Delivery Information</a>
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms & Conditions</a>
-        <a href="#">Contact Us</a>
-      </div>
-      <div class="col">
-        <h4>My Account</h4>
-        <a href="#">Sign In</a>
-        <a href="#">View Cart</a>
-        <a href="#">My Wishlist</a>
-        <a href="#">Track My Order</a>
-        <a href="#">Help</a>
-      </div>
-      <div class="col install">
-        <h4>Install App</h4>
-        <p>From App Store or Google Play</p>
-        <div class="row">
-          <img src="img/pay/app.jpg" />
-          <img src="img/pay/play.jpg" />
+        <div class="brands">
+          <div class="brands-track">
+            <div class="brand-logo"><img src="img/Zara%20Branding.jpg" alt="Zara" /></div>
+            <div class="brand-logo"><img src="img/Amazon.jpg" alt="Amazon" /></div>
+            <div class="brand-logo"><img src="img/Shein%20Logo.jpg" alt="Shein" /></div>
+            <div class="brand-logo"><img src="img/Alibaba.jpg" alt="Alibaba" /></div>
+            <div class="brand-logo"><img src="img/Ebay.jpg" alt="eBay" /></div>
+            <div class="brand-logo"><img src="img/Romwe.jpg" alt="Romwe" /></div>
+            <div class="brand-logo"><img src="img/Adidas.jpg" alt="Adidas" /></div>
+            <!-- copie pour un défilement continu -->
+            <div class="brand-logo" aria-hidden="true"><img src="img/Zara%20Branding.jpg" alt="" /></div>
+            <div class="brand-logo" aria-hidden="true"><img src="img/Amazon.jpg" alt="" /></div>
+            <div class="brand-logo" aria-hidden="true"><img src="img/Shein%20Logo.jpg" alt="" /></div>
+            <div class="brand-logo" aria-hidden="true"><img src="img/Alibaba.jpg" alt="" /></div>
+            <div class="brand-logo" aria-hidden="true"><img src="img/Ebay.jpg" alt="" /></div>
+            <div class="brand-logo" aria-hidden="true"><img src="img/Romwe.jpg" alt="" /></div>
+            <div class="brand-logo" aria-hidden="true"><img src="img/Adidas.jpg" alt="" /></div>
+          </div>
         </div>
-        <p>Secured Payment Gateways</p>
-        <img src="img/pay/pay.png" />
-      </div>
-      <div class="copyright">
-        <p>© 2023, Tech2 etc - HTML CSS E-Commerce Website</p>
-      </div>
-    </footer>
+      </section>
+    </main>
+
+    <footer id="site-footer"></footer>
+
+    <script src="products.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
