@@ -6,12 +6,87 @@ const STORE = {
   email: "contact@pipodistore.com",
   address: "56 Route de Frères, Puits-Blain 24, Pétion-Ville",
   hours: "Lun – Sam : 8h00 – 17h00",
-  currency: "USD",
   payments: ["MonCash", "NatCash", "Espèces"],
+  htgRate: 132, // 1 USD = 132 HTG — à mettre à jour selon le taux du jour
+  delivery: {
+    inStock: "2 à 3 jours", // délai pour un article en stock
+    onOrder: "10 à 15 jours", // délai pour un article commandé à l'étranger
+    zones: "Port-au-Prince et ses environs. Autres villes : contactez-nous sur WhatsApp.",
+  },
+  returns:
+    "Vous pouvez échanger un article dans les 3 jours suivant la livraison s'il est défectueux ou ne correspond pas à votre commande. L'article doit être neuf, non porté et dans son emballage d'origine.",
   socials: {
     facebook: "#",
     instagram: "#",
     tiktok: "#",
+  },
+};
+
+// Questions fréquentes (accueil)
+const FAQ = [
+  {
+    q: "Comment passer commande ?",
+    a: "Ajoutez vos articles au panier puis touchez « Commander sur WhatsApp » : votre commande nous est envoyée automatiquement. Nous vous répondons pour confirmer la disponibilité, le prix de livraison et le paiement.",
+  },
+  {
+    q: "Quels sont les délais de livraison ?",
+    a: `Article en stock : ${STORE.delivery.inStock}. Article sur commande (Shein, Amazon, Zara…) : ${STORE.delivery.onOrder}.`,
+  },
+  { q: "Où livrez-vous ?", a: STORE.delivery.zones },
+  {
+    q: "Comment puis-je payer ?",
+    a: `Nous acceptons : ${STORE.payments.join(", ")}. Le paiement se fait à la commande ou à la livraison selon l'article ; nous vous l'indiquons sur WhatsApp.`,
+  },
+  {
+    q: "Pouvez-vous commander un article qui n'est pas sur le site ?",
+    a: "Oui ! Envoyez-nous le lien de l'article (Shein, Amazon, Zara, eBay…) sur WhatsApp : nous vous donnons le prix livré en Haïti.",
+  },
+  { q: "Puis-je échanger ou retourner un article ?", a: STORE.returns },
+];
+
+// Guides des tailles (valeurs indicatives)
+const SIZE_GUIDES = {
+  chaussures: {
+    title: "Guide des tailles – Chaussures",
+    head: ["EU", "US Homme", "US Femme", "Longueur du pied"],
+    rows: [
+      ["36", "4", "5,5", "22,5 cm"],
+      ["37", "5", "6,5", "23,2 cm"],
+      ["38", "5,5", "7", "23,9 cm"],
+      ["39", "6,5", "8", "24,6 cm"],
+      ["40", "7", "8,5", "25,2 cm"],
+      ["41", "8", "9,5", "25,9 cm"],
+      ["42", "8,5", "10", "26,6 cm"],
+      ["43", "9,5", "11", "27,3 cm"],
+      ["44", "10", "11,5", "27,9 cm"],
+      ["45", "11", "12,5", "28,6 cm"],
+    ],
+    kids: {
+      head: ["EU", "US Enfant", "Longueur du pied"],
+      rows: [
+        ["24", "8C", "14,5 cm"],
+        ["25", "8,5C", "15,2 cm"],
+        ["26", "9,5C", "16 cm"],
+        ["27", "10C", "16,5 cm"],
+        ["28", "11C", "17,2 cm"],
+        ["29", "11,5C", "17,8 cm"],
+        ["30", "12,5C", "18,5 cm"],
+      ],
+    },
+    tip: "Mesurez votre pied du talon au gros orteil, en fin de journée. Entre deux tailles, prenez la plus grande.",
+  },
+  vetements: {
+    title: "Guide des tailles – Vêtements",
+    head: ["Taille", "Tour de poitrine", "Tour de taille"],
+    rows: [
+      ["XS", "80 – 84 cm", "64 – 68 cm"],
+      ["S", "86 – 90 cm", "70 – 74 cm"],
+      ["M", "92 – 96 cm", "76 – 80 cm"],
+      ["L", "98 – 102 cm", "82 – 86 cm"],
+      ["XL", "104 – 108 cm", "88 – 92 cm"],
+      ["XXL", "110 – 114 cm", "94 – 98 cm"],
+    ],
+    tip: "Les tailles varient selon les marques (Shein taille souvent petit). En cas de doute, demandez-nous sur WhatsApp.",
   },
 };
 
@@ -27,30 +102,20 @@ const NAV_LINKS = [
 
 const CART_KEY = "pipodi-cart";
 const FAVS_KEY = "pipodi-favs";
+const CURRENCY_KEY = "pipodi-currency";
+const THEME_KEY = "pipodi-theme";
+
+const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 // ===== Utilitaires =====
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 
-const formatPrice = (n) =>
-  new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: STORE.currency,
-    minimumFractionDigits: Number.isInteger(n) ? 0 : 2,
-  }).format(n);
-
-const getProduct = (id) => PRODUCTS.find((p) => p.id === id);
-
-const imgSrc = (path) => encodeURI(path);
-
-const whatsappLink = (text) =>
-  `https://wa.me/${STORE.whatsapp}?text=${encodeURIComponent(text)}`;
-
-const readStore = (key) => {
+const readStore = (key, fallback = []) => {
   try {
-    return JSON.parse(localStorage.getItem(key)) || [];
+    return JSON.parse(localStorage.getItem(key)) ?? fallback;
   } catch {
-    return [];
+    return fallback;
   }
 };
 
@@ -59,6 +124,38 @@ const writeStore = (key, value) => {
     localStorage.setItem(key, JSON.stringify(value));
   } catch {}
 };
+
+let currency = readStore(CURRENCY_KEY, "USD") === "HTG" ? "HTG" : "USD";
+
+// Les prix sont saisis en USD dans products.js et convertis à l'affichage
+const formatPrice = (usd) => {
+  if (currency === "HTG") {
+    return `${Math.round(usd * STORE.htgRate).toLocaleString("fr-FR")} HTG`;
+  }
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: Number.isInteger(usd) ? 0 : 2,
+  }).format(usd);
+};
+
+// Prix qui se met à jour tout seul quand on change de devise
+const priceTag = (usd, tag = "span") => `<${tag} data-price="${usd}">${formatPrice(usd)}</${tag}>`;
+
+const getProduct = (id) => PRODUCTS.find((p) => p.id === id);
+
+const imgSrc = (path) => encodeURI(path);
+
+const whatsappLink = (text) =>
+  `https://wa.me/${STORE.whatsapp}?text=${encodeURIComponent(text)}`;
+
+const itemLabel = (p, i) =>
+  `${p.name}${i.color ? ` – ${i.color}` : ""}${i.size ? ` (taille ${i.size})` : ""}`;
+
+const availability = (p) =>
+  p.inStock
+    ? { cls: "in-stock", label: "En stock", delay: STORE.delivery.inStock }
+    : { cls: "on-order", label: "Sur commande", delay: STORE.delivery.onOrder };
 
 const params = new URLSearchParams(location.search);
 const page = document.body.dataset.page;
@@ -69,9 +166,26 @@ function renderHeader() {
   const el = $("#site-header");
   if (!el) return;
 
+  const news = [
+    `<i class="fa-solid fa-truck-fast"></i>Livraison partout en Haïti`,
+    `<i class="fa-brands fa-whatsapp"></i>Commande simple sur WhatsApp`,
+    `<i class="fa-solid fa-mobile-screen"></i>Paiement : ${STORE.payments.join(", ")}`,
+    `<i class="fa-solid fa-earth-americas"></i>On commande pour vous sur Shein, Amazon, Zara…`,
+  ];
+  const newsHtml = news.map((n) => `<span>${n}</span>`).join("");
+
   el.innerHTML = `
     <div class="topbar">
-      <p><i class="fa-solid fa-truck-fast"></i> Livraison partout en Haïti<span class="topbar-extra"> · Commandez facilement sur WhatsApp</span></p>
+      <div class="topbar-marquee">
+        <div class="marquee-track">${newsHtml}${newsHtml.replaceAll("<span>", '<span aria-hidden="true">')}</div>
+      </div>
+      <div class="topbar-tools">
+        <button class="theme-btn" data-theme-toggle aria-label="Changer de thème"></button>
+        <div class="currency-switch" role="group" aria-label="Devise">
+          <button data-currency="USD">USD</button>
+          <button data-currency="HTG">HTG</button>
+        </div>
+      </div>
     </div>
     <nav class="nav container">
       <a href="index.html" class="nav-logo" aria-label="Accueil Pipodi Store">
@@ -96,6 +210,8 @@ function renderHeader() {
       </div>
     </nav>
   `;
+  updateCurrencySwitch();
+  updateThemeButton();
 
   const onScroll = () => el.classList.toggle("scrolled", window.scrollY > 10);
   window.addEventListener("scroll", onScroll, { passive: true });
@@ -155,10 +271,11 @@ function renderFooter() {
       </div>
       <div class="footer-col">
         <h4>Aide</h4>
+        <a href="index.html#comment-commander">Comment commander</a>
+        <a href="index.html#faq">Questions fréquentes</a>
         <a href="#" data-open-cart>Mon panier</a>
         <a href="shop.html?cat=favs">Mes favoris</a>
         <a href="${whatsappLink("Bonjour, j'ai une question sur ma commande.")}" target="_blank" rel="noopener">Suivre ma commande</a>
-        <a href="${whatsappLink("Bonjour, je voudrais commander un article (lien) :")}" target="_blank" rel="noopener">Commande spéciale</a>
       </div>
       <div class="footer-col">
         <h4>Contact</h4>
@@ -180,6 +297,45 @@ function renderFooter() {
     </a>
   `;
 }
+
+// ===== Devise (USD / HTG) =====
+function updateCurrencySwitch() {
+  $$("[data-currency]").forEach((b) => {
+    const on = b.dataset.currency === currency;
+    b.classList.toggle("active", on);
+    b.setAttribute("aria-pressed", on);
+  });
+}
+
+function setCurrency(value) {
+  if (value === currency) return;
+  currency = value;
+  writeStore(CURRENCY_KEY, value);
+  updateCurrencySwitch();
+  $$("[data-price]").forEach((el) => (el.textContent = formatPrice(Number(el.dataset.price))));
+  document.dispatchEvent(new Event("currency:change"));
+}
+
+// ===== Thème clair / sombre =====
+// Sans choix enregistré, on suit le réglage du téléphone (voir le script dans <head>)
+const currentTheme = () => document.documentElement.dataset.theme || "light";
+
+function updateThemeButton() {
+  const dark = currentTheme() === "dark";
+  $$("[data-theme-toggle]").forEach((b) => {
+    b.innerHTML = `<i class="fa-solid ${dark ? "fa-sun" : "fa-moon"}"></i>`;
+    b.setAttribute("aria-label", dark ? "Passer en mode clair" : "Passer en mode sombre");
+  });
+}
+
+function applyTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+  updateThemeButton();
+}
+
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+  if (!readStore(THEME_KEY, null)) applyTheme(e.matches ? "dark" : "light");
+});
 
 // ===== Favoris =====
 const getFavs = () => readStore(FAVS_KEY).filter((id) => getProduct(id));
@@ -225,18 +381,60 @@ function saveCart(items) {
   updateCounts();
 }
 
-function addToCart(id, qty = 1, size = null) {
+function addToCart(id, qty = 1, size = null, color = null, sourceImg = null) {
   const items = getCart();
-  const existing = items.find((i) => i.id === id && i.size === size);
+  const existing = items.find((i) => i.id === id && i.size === size && (i.color || null) === color);
   if (existing) existing.qty += qty;
-  else items.push({ id, qty, size });
+  else items.push({ id, qty, size, color });
   saveCart(items);
-  $$(".cart-count").forEach((b) => {
-    b.classList.remove("bump");
-    void b.offsetWidth;
-    b.classList.add("bump");
+  flyToCart(sourceImg).then(() => {
+    $$(".cart-count").forEach((b) => {
+      b.classList.remove("bump");
+      void b.offsetWidth;
+      b.classList.add("bump");
+    });
+    openCart();
   });
-  openCart();
+}
+
+// La photo du produit « vole » jusqu'à l'icône du panier visible (en-tête ou barre du bas)
+function flyToCart(img) {
+  const target = $$(".nav-actions [data-open-cart], .bottom-nav [data-open-cart]").find(
+    (el) => el.getBoundingClientRect().width > 0
+  );
+  if (!img || !target || reducedMotion || !img.animate) return Promise.resolve();
+
+  const from = img.getBoundingClientRect();
+  const to = target.getBoundingClientRect();
+  const clone = img.cloneNode();
+  clone.removeAttribute("id");
+  Object.assign(clone.style, {
+    position: "fixed",
+    left: `${from.left}px`,
+    top: `${from.top}px`,
+    width: `${from.width}px`,
+    height: `${from.height}px`,
+    objectFit: "cover",
+    borderRadius: "16px",
+    zIndex: 300,
+    pointerEvents: "none",
+    viewTransitionName: "none",
+    opacity: 1,
+  });
+  document.body.appendChild(clone);
+  const dx = to.left + to.width / 2 - (from.left + from.width / 2);
+  const dy = to.top + to.height / 2 - (from.top + from.height / 2);
+  return clone
+    .animate(
+      [
+        { transform: "translate(0, 0) scale(1)", opacity: 1 },
+        { transform: `translate(${dx * 0.6}px, ${dy * 0.6 - 60}px) scale(0.5)`, opacity: 0.9, offset: 0.6 },
+        { transform: `translate(${dx}px, ${dy}px) scale(0.08)`, opacity: 0.4 },
+      ],
+      { duration: 700, easing: "cubic-bezier(0.5, 0, 0.3, 1)" }
+    )
+    .finished.catch(() => {})
+    .then(() => clone.remove());
 }
 
 function updateCounts() {
@@ -287,6 +485,7 @@ function renderCartDrawer() {
     saveCart(items);
     fillCartDrawer();
   });
+  document.addEventListener("currency:change", fillCartDrawer);
 }
 
 function fillCartDrawer() {
@@ -314,7 +513,7 @@ function fillCartDrawer() {
     items
       .map((i) => {
         const p = getProduct(i.id);
-        return `• ${p.name}${i.size ? ` (taille ${i.size})` : ""} × ${i.qty} – ${formatPrice(p.price * i.qty)}`;
+        return `• ${itemLabel(p, i)} × ${i.qty} – ${formatPrice(p.price * i.qty)}`;
       })
       .join("\n") +
     `\n\nTotal : ${formatPrice(total)}`;
@@ -322,12 +521,13 @@ function fillCartDrawer() {
   body.innerHTML = items
     .map((i, idx) => {
       const p = getProduct(i.id);
+      const meta = [p.brand, i.color, i.size && `Taille ${i.size}`].filter(Boolean).join(" · ");
       return `
       <div class="cart-item">
         <a href="sproduct.html?id=${p.id}"><img src="${imgSrc(p.image)}" alt="${p.name}" /></a>
         <div class="ci-info">
           <a href="sproduct.html?id=${p.id}" class="ci-name">${p.name}</a>
-          <span class="ci-meta">${p.brand}${i.size ? ` · Taille ${i.size}` : ""}</span>
+          <span class="ci-meta">${meta}</span>
           <div class="qty qty-sm">
             <button type="button" data-idx="${idx}" data-delta="-1" aria-label="Diminuer">−</button>
             <span>${i.qty}</span>
@@ -336,7 +536,7 @@ function fillCartDrawer() {
         </div>
         <div class="ci-side">
           <button class="ci-remove" data-remove="${idx}" aria-label="Retirer"><i class="fa-regular fa-trash-can"></i></button>
-          <strong>${formatPrice(p.price * i.qty)}</strong>
+          ${priceTag(p.price * i.qty, "strong")}
         </div>
       </div>`;
     })
@@ -344,7 +544,7 @@ function fillCartDrawer() {
 
   foot.innerHTML = `
     <div class="row"><span>Livraison</span><span>Calculée sur WhatsApp</span></div>
-    <div class="row total"><span>Total</span><span>${formatPrice(total)}</span></div>
+    <div class="row total"><span>Total</span>${priceTag(total)}</div>
     <a class="btn btn-whatsapp btn-block" href="${whatsappLink(message)}" target="_blank" rel="noopener">
       <i class="fa-brands fa-whatsapp"></i> Commander sur WhatsApp
     </a>
@@ -400,8 +600,8 @@ function productCard(p) {
         <h3 class="product-name"><a href="sproduct.html?id=${p.id}">${p.name}</a></h3>
         <div class="product-bottom">
           <p class="product-price">
-            ${formatPrice(p.price)}
-            ${p.oldPrice ? `<s>${formatPrice(p.oldPrice)}</s>` : ""}
+            ${priceTag(p.price)}
+            ${p.oldPrice ? priceTag(p.oldPrice, "s") : ""}
           </p>
           <button class="add-btn" data-add="${p.id}" aria-label="Ajouter ${p.name} au panier">
             <i class="fa-solid fa-plus"></i>
@@ -427,8 +627,99 @@ function renderProductGrids() {
   });
 }
 
+// ===== Accueil : FAQ & avis =====
+function renderFaq() {
+  const el = $("#faq-list");
+  if (!el) return;
+  el.innerHTML = FAQ.map(
+    (f, i) => `
+    <details class="accordion reveal" ${i === 0 ? "open" : ""}>
+      <summary>${f.q}<i class="fa-solid fa-plus"></i></summary>
+      <p>${f.a}</p>
+    </details>`
+  ).join("");
+}
+
+function renderReviews() {
+  const section = $("#avis");
+  if (!section || typeof REVIEWS === "undefined" || !REVIEWS.length) return;
+  section.hidden = false;
+  $("#reviews-list").innerHTML = REVIEWS.map(
+    (r) => `
+    <figure class="review reveal">
+      ${
+        r.rating
+          ? `<div class="stars" aria-label="${r.rating} sur 5">${'<i class="fa-solid fa-star"></i>'.repeat(r.rating)}${'<i class="fa-regular fa-star"></i>'.repeat(5 - r.rating)}</div>`
+          : ""
+      }
+      <blockquote>« ${r.text} »</blockquote>
+      <figcaption>
+        <span class="avatar">${r.name.trim().charAt(0).toUpperCase()}</span>
+        <span><strong>${r.name}</strong>${r.city ? `<small>${r.city}</small>` : ""}</span>
+      </figcaption>
+    </figure>`
+  ).join("");
+}
+
+// ===== Guide des tailles =====
+function sizeTable(head, rows) {
+  return `<div class="table-wrap"><table>
+    <thead><tr>${head.map((h) => `<th>${h}</th>`).join("")}</tr></thead>
+    <tbody>${rows.map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join("")}</tr>`).join("")}</tbody>
+  </table></div>`;
+}
+
+function openSizeGuide(category) {
+  const guide = SIZE_GUIDES[category];
+  if (!guide) return;
+  let dialog = $("#size-guide");
+  if (!dialog) {
+    dialog = document.createElement("dialog");
+    dialog.id = "size-guide";
+    dialog.className = "modal";
+    dialog.addEventListener("click", (e) => {
+      if (e.target === dialog || e.target.closest("[data-close-modal]")) dialog.close();
+    });
+    document.body.appendChild(dialog);
+  }
+  dialog.innerHTML = `
+    <div class="modal-inner">
+      <div class="modal-head">
+        <h2>${guide.title}</h2>
+        <button class="icon-btn" data-close-modal aria-label="Fermer"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      ${guide.kids ? "<h3>Adultes</h3>" : ""}
+      ${sizeTable(guide.head, guide.rows)}
+      ${guide.kids ? `<h3>Enfants</h3>${sizeTable(guide.kids.head, guide.kids.rows)}` : ""}
+      <p class="modal-tip"><i class="fa-solid fa-lightbulb"></i> ${guide.tip}</p>
+    </div>`;
+  dialog.showModal();
+}
+
 // ===== Clics globaux (délégation) =====
 document.addEventListener("click", (e) => {
+  if (e.target.closest("[data-theme-toggle]")) {
+    const next = currentTheme() === "dark" ? "light" : "dark";
+    writeStore(THEME_KEY, next);
+    applyTheme(next);
+    return;
+  }
+  const cur = e.target.closest("[data-currency]");
+  if (cur) {
+    setCurrency(cur.dataset.currency);
+    return;
+  }
+  // Transition entre pages : la photo de la carte s'agrandit vers la fiche produit
+  const productLink = e.target.closest('a[href^="sproduct.html"]');
+  if (productLink) {
+    const img = productLink.closest(".product-card, .cart-item")?.querySelector("img");
+    if (img) {
+      $$("[style*='view-transition-name']").forEach((el) => (el.style.viewTransitionName = ""));
+      const main = $("#pd-main");
+      if (main) main.style.viewTransitionName = "none";
+      img.style.viewTransitionName = "product-image";
+    }
+  }
   const fav = e.target.closest("[data-fav]");
   if (fav) {
     e.preventDefault();
@@ -448,9 +739,9 @@ document.addEventListener("click", (e) => {
   if (add) {
     e.preventDefault();
     const p = getProduct(add.dataset.add);
-    // Les produits avec tailles passent par la fiche produit pour choisir la taille
-    if (p.sizes && p.sizes.length) location.href = `sproduct.html?id=${p.id}`;
-    else addToCart(p.id);
+    // Les produits avec tailles ou couleurs passent par la fiche produit pour faire le choix
+    if ((p.sizes && p.sizes.length) || (p.colors && p.colors.length)) location.href = `sproduct.html?id=${p.id}`;
+    else addToCart(p.id, 1, null, null, add.closest(".product-card")?.querySelector(".product-media img"));
   }
 });
 
@@ -529,13 +820,28 @@ function initProductPage() {
   if (!el) return;
 
   const p = getProduct(params.get("id")) || PRODUCTS[0];
+  const photos = [p.image, ...(p.images || [])];
+  const stock = availability(p);
+  const hasGuide = p.sizes && SIZE_GUIDES[p.category];
   document.title = `${p.name} | ${STORE.name}`;
 
   el.innerHTML = `
-    <div class="pd-media">
-      <img src="${imgSrc(p.image)}" alt="${p.name}" />
-      ${p.badge ? `<span class="badge">${p.badge}</span>` : ""}
-      ${favButton(p.id, "fav-btn-lg")}
+    <div class="pd-gallery">
+      <div class="pd-media">
+        <img src="${imgSrc(photos[0])}" alt="${p.name}" id="pd-main" />
+        ${p.badge ? `<span class="badge">${p.badge}</span>` : ""}
+        ${favButton(p.id, "fav-btn-lg")}
+      </div>
+      ${
+        photos.length > 1
+          ? `<div class="pd-thumbs">${photos
+              .map(
+                (src, i) =>
+                  `<button class="pd-thumb ${i === 0 ? "active" : ""}" data-photo="${imgSrc(src)}" aria-label="Photo ${i + 1}"><img src="${imgSrc(src)}" alt="" loading="lazy" /></button>`
+              )
+              .join("")}</div>`
+          : ""
+      }
     </div>
     <div class="pd-info">
       <nav class="breadcrumb">
@@ -545,14 +851,28 @@ function initProductPage() {
       </nav>
       <span class="product-brand">${p.brand}</span>
       <h1>${p.name}</h1>
-      <p class="pd-price">${formatPrice(p.price)} ${p.oldPrice ? `<s>${formatPrice(p.oldPrice)}</s>` : ""}</p>
+      <p class="pd-price">${priceTag(p.price)} ${p.oldPrice ? priceTag(p.oldPrice, "s") : ""}</p>
+      <p class="stock ${stock.cls}"><span class="dot"></span> ${stock.label} · livré en ${stock.delay}</p>
       <p class="pd-desc">${p.description}</p>
+      ${
+        p.colors
+          ? `<div class="pd-field">
+              <label>Couleur : <span id="color-name" class="muted">à choisir</span></label>
+              <div class="options" id="color-options">
+                ${p.colors.map((c) => `<button type="button" class="opt-btn" data-color="${c}">${c}</button>`).join("")}
+              </div>
+            </div>`
+          : ""
+      }
       ${
         p.sizes
           ? `<div class="pd-field">
-              <label>Taille</label>
-              <div class="size-options">
-                ${p.sizes.map((s) => `<button type="button" class="size-btn" data-size="${s}">${s}</button>`).join("")}
+              <div class="field-head">
+                <label>Taille</label>
+                ${hasGuide ? `<button type="button" class="link-btn" id="size-guide-btn"><i class="fa-solid fa-ruler"></i> Guide des tailles</button>` : ""}
+              </div>
+              <div class="options" id="size-options">
+                ${p.sizes.map((s) => `<button type="button" class="opt-btn size-btn" data-size="${s}">${s}</button>`).join("")}
               </div>
             </div>`
           : ""
@@ -569,30 +889,68 @@ function initProductPage() {
         <button class="btn btn-primary" id="pd-add"><i class="fa-solid fa-bag-shopping"></i> Ajouter au panier</button>
         <a class="btn btn-whatsapp" id="pd-wa" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Commander sur WhatsApp</a>
       </div>
-      <ul class="pd-perks">
-        <li><i class="fa-solid fa-truck-fast"></i> Livraison partout en Haïti</li>
-        <li><i class="fa-solid fa-shield-halved"></i> Produits vérifiés avant livraison</li>
-        <li><i class="fa-solid fa-mobile-screen"></i> Paiement : ${STORE.payments.join(", ")}</li>
-      </ul>
+      <div class="pd-accordions">
+        <details class="accordion" open>
+          <summary>Description<i class="fa-solid fa-plus"></i></summary>
+          <p>${p.description}</p>
+          <ul class="spec-list">
+            <li><span>Marque</span>${p.brand}</li>
+            <li><span>Catégorie</span>${CATEGORIES[p.category]}</li>
+            ${p.colors ? `<li><span>Couleurs</span>${p.colors.join(", ")}</li>` : ""}
+            ${p.sizes ? `<li><span>Tailles</span>${p.sizes.join(", ")}</li>` : ""}
+          </ul>
+        </details>
+        <details class="accordion">
+          <summary>Livraison & paiement<i class="fa-solid fa-plus"></i></summary>
+          <ul class="spec-list">
+            <li><span>Délai</span>${stock.label} : ${stock.delay}</li>
+            <li><span>Zones</span>${STORE.delivery.zones}</li>
+            <li><span>Frais</span>Calculés selon votre adresse, confirmés sur WhatsApp</li>
+            <li><span>Paiement</span>${STORE.payments.join(", ")}</li>
+          </ul>
+        </details>
+        <details class="accordion">
+          <summary>Retours & échanges<i class="fa-solid fa-plus"></i></summary>
+          <p>${STORE.returns}</p>
+        </details>
+      </div>
     </div>
   `;
 
   let size = null;
+  let color = null;
   const qtyInput = $("#qty");
   const qty = () => Math.max(1, parseInt(qtyInput.value, 10) || 1);
 
   const updateWa = () => {
     $("#pd-wa").href = whatsappLink(
-      `Bonjour Pipodi Store, je voudrais commander :\n• ${p.name}${size ? ` (taille ${size})` : ""} × ${qty()} – ${formatPrice(p.price * qty())}`
+      `Bonjour Pipodi Store, je voudrais commander :\n• ${itemLabel(p, { size, color })} × ${qty()} – ${formatPrice(p.price * qty())}`
     );
   };
 
-  $$(".size-btn", el).forEach((b) =>
+  const selectOption = (groupId, btn) => {
+    $$(".opt-btn", $(groupId)).forEach((x) => x.classList.toggle("active", x === btn));
+    $(groupId).classList.remove("error");
+    updateWa();
+  };
+  $$("[data-size]", el).forEach((b) =>
     b.addEventListener("click", () => {
       size = b.dataset.size;
-      $$(".size-btn", el).forEach((x) => x.classList.toggle("active", x === b));
-      $(".size-options").classList.remove("error");
-      updateWa();
+      selectOption("#size-options", b);
+    })
+  );
+  $$("[data-color]", el).forEach((b) =>
+    b.addEventListener("click", () => {
+      color = b.dataset.color;
+      $("#color-name").textContent = color;
+      $("#color-name").classList.remove("muted");
+      selectOption("#color-options", b);
+    })
+  );
+  $$("[data-photo]", el).forEach((b) =>
+    b.addEventListener("click", () => {
+      $("#pd-main").src = b.dataset.photo;
+      $$(".pd-thumb", el).forEach((x) => x.classList.toggle("active", x === b));
     })
   );
   $$("[data-step]", el).forEach((b) =>
@@ -602,27 +960,105 @@ function initProductPage() {
     })
   );
   qtyInput.addEventListener("input", updateWa);
+  if (hasGuide) $("#size-guide-btn").addEventListener("click", () => openSizeGuide(p.category));
 
-  const needsSize = () => {
-    if (p.sizes && !size) {
-      $(".size-options").classList.add("error");
-      showToast(`<i class="fa-solid fa-circle-exclamation"></i> Choisissez une taille`);
-      return true;
-    }
-    return false;
+  const missingChoice = () => {
+    const missing = [];
+    if (p.colors && !color) missing.push(["#color-options", "une couleur"]);
+    if (p.sizes && !size) missing.push(["#size-options", "une taille"]);
+    if (!missing.length) return false;
+    missing.forEach(([id]) => $(id).classList.add("error"));
+    showToast(`<i class="fa-solid fa-circle-exclamation"></i> Choisissez ${missing.map((m) => m[1]).join(" et ")}`);
+    return true;
   };
   $("#pd-add").addEventListener("click", () => {
-    if (!needsSize()) addToCart(p.id, qty(), size);
+    if (!missingChoice()) addToCart(p.id, qty(), size, color, $("#pd-main"));
   });
   $("#pd-wa").addEventListener("click", (e) => {
-    if (needsSize()) e.preventDefault();
+    if (missingChoice()) e.preventDefault();
   });
+  document.addEventListener("currency:change", updateWa);
   updateWa();
 }
+
+// ===== Accueil : carrousel =====
+function initHero() {
+  const track = $("#hero-track");
+  if (!track) return;
+  const slides = [...track.children];
+  const dots = $("#hero-dots");
+  dots.innerHTML = slides
+    .map((_, i) => `<button data-hero-go="${i}" aria-label="Aller à la slide ${i + 1}"></button>`)
+    .join("");
+  let index = 0;
+  let timer;
+
+  const go = (n) => {
+    index = (n + slides.length) % slides.length;
+    track.scrollTo({ left: slides[index].offsetLeft, behavior: reducedMotion ? "auto" : "smooth" });
+  };
+  const sync = () => {
+    index = Math.round(track.scrollLeft / track.clientWidth);
+    $$("button", dots).forEach((d, i) => d.classList.toggle("active", i === index));
+  };
+  const stop = () => clearInterval(timer);
+  const start = () => {
+    stop();
+    if (!reducedMotion) timer = setInterval(() => !document.hidden && go(index + 1), 6000);
+  };
+
+  let ticking = false;
+  track.addEventListener(
+    "scroll",
+    () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        sync();
+        ticking = false;
+      });
+    },
+    { passive: true }
+  );
+  $(".hero-carousel").addEventListener("click", (e) => {
+    const step = e.target.closest("[data-hero-step]");
+    const dot = e.target.closest("[data-hero-go]");
+    if (step) go(index + Number(step.dataset.heroStep));
+    else if (dot) go(Number(dot.dataset.heroGo));
+    else return;
+    start();
+  });
+  // Pause quand le visiteur interagit avec le carrousel
+  ["pointerenter", "focusin", "touchstart"].forEach((ev) => track.parentElement.addEventListener(ev, stop, { passive: true }));
+  ["pointerleave", "focusout"].forEach((ev) => track.parentElement.addEventListener(ev, start));
+  sync();
+  start();
+}
+
+function renderCategoryCounts() {
+  $$("[data-cat-count]").forEach((el) => {
+    const n = PRODUCTS.filter((p) => p.category === el.dataset.catCount).length;
+    el.textContent = n ? `${n} article${n > 1 ? "s" : ""}` : "";
+  });
+}
+
+// ===== Chargement des photos produit (squelette animé puis fondu) =====
+const markLoaded = (img) => img.classList.add("loaded");
+document.addEventListener(
+  "load",
+  (e) => e.target.matches?.(".product-media img") && markLoaded(e.target),
+  true
+);
+document.addEventListener(
+  "error",
+  (e) => e.target.matches?.(".product-media img") && markLoaded(e.target),
+  true
+);
 
 // ===== Animations d'apparition au défilement =====
 let revealObserver;
 function observeReveal() {
+  $$(".product-media img:not(.loaded)").forEach((img) => img.complete && markLoaded(img));
   if (!("IntersectionObserver" in window)) {
     $$(".reveal").forEach((el) => el.classList.add("visible"));
     return;
@@ -648,6 +1084,10 @@ renderBottomNav();
 renderFooter();
 renderCartDrawer();
 renderProductGrids();
+renderFaq();
+renderReviews();
+renderCategoryCounts();
+initHero();
 initShop();
 initProductPage();
 updateCounts();

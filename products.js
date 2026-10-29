@@ -4,6 +4,11 @@
 // badge (optionnel) : "Nouveau" | "Promo" | "Populaire"
 // oldPrice (optionnel) : ancien prix barré
 // tags : "featured" = Produits vedettes (accueil), "new" = Nouveautés (accueil)
+//
+// Champs optionnels pour enrichir la fiche produit :
+// images : ["img/photo2.jpg", "img/photo3.jpg"]  → photos supplémentaires (galerie)
+// colors : ["Noir", "Blanc"]                     → choix de couleur
+// inStock : true                                 → « En stock » (sinon « Sur commande »)
 
 const PRODUCTS = [
   {
@@ -145,15 +150,14 @@ const PRODUCTS = [
     description: "T-shirt Fendi en coton noir, logo emblématique.",
   },
   {
-    id: "tshirt-bape",
-    name: "T-shirt BAPE",
+    id: "casquette-bape",
+    name: "Casquette BAPE",
     brand: "BAPE",
-    category: "vetements",
-    price: 65,
+    category: "accessoires",
+    price: 45,
     image: "img/Bap.jpg",
     tags: ["new"],
-    sizes: ["S", "M", "L", "XL"],
-    description: "T-shirt streetwear A Bathing Ape à imprimé graphique.",
+    description: "Casquette streetwear A Bathing Ape bleu marine, logo brodé. Taille ajustable.",
   },
   {
     id: "bracelets-perles",
@@ -284,6 +288,12 @@ const PRODUCTS = [
     description: "Coque au style « aesthetic » beige, douce au toucher.",
   },
 ];
+
+// Avis clients affichés sur l'accueil. N'ajoutez que de VRAIS avis.
+// Tant que la liste est vide, la section « Avis clients » reste cachée.
+// Exemple :
+// { name: "Marie J.", city: "Pétion-Ville", rating: 5, text: "Commande reçue en 3 jours, parfait !" },
+const REVIEWS = [];
 
 const CATEGORIES = {
   chaussures: "Chaussures",

@@ -11,24 +11,78 @@
     <meta name="theme-color" content="#0b4a5e" />
     <link rel="icon" href="img/logo.png" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" referrerpolicy="no-referrer" />
+    <script>
+      // Applique le thème (clair/sombre) avant l'affichage pour éviter un flash
+      (function () {
+        var t = null;
+        try { t = JSON.parse(localStorage.getItem("pipodi-theme")); } catch (e) {}
+        if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.dataset.theme = t;
+      })();
+    </script>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body data-page="home">
     <header id="site-header"></header>
 
     <main>
-      <section class="hero">
-        <div class="container">
-          <div class="hero-content reveal">
-            <span class="eyebrow">Nouvelle collection</span>
-            <h1>Le style que vous aimez, <span class="accent">livré chez vous.</span></h1>
-            <p>Chaussures, vêtements, accessoires et électronique des marques que vous aimez. Commandez en quelques clics, on s'occupe du reste.</p>
-            <div class="hero-actions">
-              <a href="shop.html" class="btn btn-primary">Découvrir la boutique <i class="fa-solid fa-arrow-right"></i></a>
-              <a href="#nouveautes" class="btn btn-outline">Nouveautés</a>
+      <section class="hero-carousel" aria-roledescription="carrousel" aria-label="À la une">
+        <div class="hero-track" id="hero-track">
+          <div class="slide slide-photo" role="group" aria-roledescription="slide" aria-label="1 sur 3">
+            <div class="container">
+              <div class="hero-content">
+                <span class="eyebrow">Nouvelle collection</span>
+                <h1 class="hero-title">Le style que vous aimez, <span class="accent">livré chez vous.</span></h1>
+                <p>Chaussures, vêtements, accessoires et électronique des marques que vous aimez. Commandez en quelques clics, on s'occupe du reste.</p>
+                <div class="hero-actions">
+                  <a href="shop.html" class="btn btn-primary">Découvrir la boutique <i class="fa-solid fa-arrow-right"></i></a>
+                  <a href="#nouveautes" class="btn btn-outline">Nouveautés</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="slide slide-sun" role="group" aria-roledescription="slide" aria-label="2 sur 3">
+            <span class="blob blob-white" style="top: -120px; left: -80px"></span>
+            <span class="blob blob-orange" style="bottom: -160px; right: 10%"></span>
+            <div class="container slide-grid">
+              <div class="hero-content">
+                <span class="eyebrow">Sneakers du moment</span>
+                <h2 class="hero-title">Des paires qui font <span>la différence.</span></h2>
+                <p>Nike, Adidas, Yeezy… Les modèles les plus demandés, livrés partout en Haïti.</p>
+                <div class="hero-actions">
+                  <a href="shop.html?cat=chaussures" class="btn btn-dark">Voir les chaussures <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+              </div>
+              <div class="slide-visual" aria-hidden="true">
+                <img class="float-card card-a" src="img/Nike.jpg" alt="" />
+                <img class="float-card card-b" src="img/White%20Yeezy.jpg" alt="" />
+              </div>
+            </div>
+          </div>
+
+          <div class="slide slide-night" role="group" aria-roledescription="slide" aria-label="3 sur 3">
+            <span class="blob blob-sky" style="top: -140px; right: -60px"></span>
+            <span class="blob blob-orange" style="bottom: -200px; left: 20%; opacity: 0.35"></span>
+            <div class="container slide-grid">
+              <div class="hero-content">
+                <span class="eyebrow">Électronique</span>
+                <h2 class="hero-title">La tech, <span>sans la galère.</span></h2>
+                <p>AirPods, chargeurs, claviers, adaptateurs… Commandés pour vous, vérifiés avant livraison.</p>
+                <div class="hero-actions">
+                  <a href="shop.html?cat=electronique" class="btn btn-light">Voir l'électronique <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+              </div>
+              <div class="slide-visual" aria-hidden="true">
+                <img class="float-card card-a" src="img/APPLE%20AirPods%20Max%20Argent%20-%20Casque.jpg" alt="" />
+                <img class="float-card card-b" src="img/Chargeur%20Apple%20Watch.jpg" alt="" />
+              </div>
             </div>
           </div>
         </div>
+        <button class="hero-arrow prev" data-hero-step="-1" aria-label="Slide précédente"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="hero-arrow next" data-hero-step="1" aria-label="Slide suivante"><i class="fa-solid fa-chevron-right"></i></button>
+        <div class="hero-dots" id="hero-dots"></div>
       </section>
 
       <div class="container">
@@ -51,19 +105,23 @@
         <div class="categories">
           <a href="shop.html?cat=chaussures" class="category reveal">
             <img src="img/Nike.jpg" alt="" loading="lazy" />
-            <div><h3>Chaussures</h3><span>Sneakers, sandales…</span></div>
+            <div><h3>Chaussures</h3><span>Sneakers, sandales…</span><small class="count-pill" data-cat-count="chaussures"></small></div>
+            <span class="go"><i class="fa-solid fa-arrow-right"></i></span>
           </a>
           <a href="shop.html?cat=vetements" class="category reveal">
             <img src="img/banner/b10.jpg" alt="" loading="lazy" />
-            <div><h3>Vêtements</h3><span>T-shirts, chemises, vestes</span></div>
+            <div><h3>Vêtements</h3><span>T-shirts, chemises, vestes</span><small class="count-pill" data-cat-count="vetements"></small></div>
+            <span class="go"><i class="fa-solid fa-arrow-right"></i></span>
           </a>
           <a href="shop.html?cat=accessoires" class="category reveal">
             <img src="img/banner/b7.jpg" alt="" loading="lazy" />
-            <div><h3>Accessoires</h3><span>Sacs, bijoux, coques</span></div>
+            <div><h3>Accessoires</h3><span>Sacs, bijoux, coques</span><small class="count-pill" data-cat-count="accessoires"></small></div>
+            <span class="go"><i class="fa-solid fa-arrow-right"></i></span>
           </a>
           <a href="shop.html?cat=electronique" class="category reveal">
             <img src="img/APPLE%20AirPods%20Max%20Argent%20-%20Casque.jpg" alt="" loading="lazy" />
-            <div><h3>Électronique</h3><span>Audio, chargeurs, PC</span></div>
+            <div><h3>Électronique</h3><span>Audio, chargeurs, PC</span><small class="count-pill" data-cat-count="electronique"></small></div>
+            <span class="go"><i class="fa-solid fa-arrow-right"></i></span>
           </a>
         </div>
       </section>
@@ -104,6 +162,48 @@
         <div class="product-grid product-row" data-products="new" data-limit="8"></div>
       </section>
 
+      <section class="section section-soft" id="comment-commander">
+        <div class="container">
+          <div class="section-head section-head-center">
+            <div>
+              <span class="eyebrow">Simple & rapide</span>
+              <h2>Comment commander ?</h2>
+              <p>Trois étapes, sans carte bancaire ni compte à créer.</p>
+            </div>
+          </div>
+          <ol class="steps">
+            <li class="step reveal">
+              <span class="step-num">1</span>
+              <i class="fa-solid fa-bag-shopping"></i>
+              <h3>Choisissez vos articles</h3>
+              <p>Ajoutez au panier vos coups de cœur : taille, couleur, quantité.</p>
+            </li>
+            <li class="step reveal">
+              <span class="step-num">2</span>
+              <i class="fa-brands fa-whatsapp"></i>
+              <h3>Envoyez sur WhatsApp</h3>
+              <p>Votre commande part en un clic. Nous confirmons le prix, la livraison et le paiement.</p>
+            </li>
+            <li class="step reveal">
+              <span class="step-num">3</span>
+              <i class="fa-solid fa-truck-fast"></i>
+              <h3>Recevez chez vous</h3>
+              <p>Nous livrons à votre porte. Vous payez par mobile ou en espèces.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="section container" id="avis" hidden>
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Ils nous font confiance</span>
+            <h2>Avis clients</h2>
+          </div>
+        </div>
+        <div class="reviews" id="reviews-list"></div>
+      </section>
+
       <section class="section section-soft">
         <div class="container">
           <div class="section-head">
@@ -132,6 +232,16 @@
             <div class="brand-logo" aria-hidden="true"><img src="img/Adidas.jpg" alt="" /></div>
           </div>
         </div>
+      </section>
+
+      <section class="section container faq" id="faq">
+        <div class="faq-intro">
+          <span class="eyebrow">FAQ</span>
+          <h2>Questions fréquentes</h2>
+          <p>Vous ne trouvez pas votre réponse ? Écrivez-nous, on répond vite.</p>
+          <a class="btn btn-whatsapp" href="https://wa.me/50948262051?text=Bonjour%20Pipodi%20Store%2C%20j%27ai%20une%20question%20%3A%20" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Poser une question</a>
+        </div>
+        <div class="faq-list" id="faq-list"></div>
       </section>
     </main>
 
