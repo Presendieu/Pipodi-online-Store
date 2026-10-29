@@ -10,6 +10,7 @@
 // images : ["img/photo2.jpg", "img/photo3.jpg"]  → photos supplémentaires (galerie)
 // colors : ["Noir", "Blanc"]                     → choix de couleur
 // inStock : true                                 → « En stock » (sinon « Sur commande »)
+// cutout : "img/cutouts/xxx.webp"                → photo détourée (sans fond) utilisée dans la vitrine
 
 const PRODUCTS = [
   {
@@ -32,6 +33,7 @@ const PRODUCTS = [
     category: "electronique",
     price: 549,
     image: "img/APPLE AirPods Max Argent - Casque.jpg",
+    cutout: "img/cutouts/airpods-max.webp",
     tags: ["vitrine", "featured"],
     description:
       "Casque sans fil Apple avec réduction de bruit active, audio spatial et jusqu'à 20 heures d'autonomie.",
@@ -43,6 +45,7 @@ const PRODUCTS = [
     category: "chaussures",
     price: 220,
     image: "img/White Yeezy.jpg",
+    cutout: "img/cutouts/yeezy-750-white.webp",
     badge: "Nouveau",
     tags: ["vitrine", "new"],
     sizes: ["39", "40", "41", "42", "43", "44"],
@@ -135,6 +138,7 @@ const PRODUCTS = [
     category: "accessoires",
     price: 150,
     image: "img/bag.jpg",
+    cutout: "img/cutouts/sac-kate-spade.webp",
     badge: "Nouveau",
     tags: ["vitrine", "new"],
     description: "Sac à main noir élégant, assez grand pour le quotidien.",
@@ -146,6 +150,7 @@ const PRODUCTS = [
     category: "vetements",
     price: 180,
     image: "img/Fendi T-shirt In Nero _ ModeSens.jpg",
+    cutout: "img/cutouts/tshirt-fendi.webp",
     tags: ["vitrine", "new"],
     sizes: ["S", "M", "L", "XL"],
     description: "T-shirt Fendi en coton noir, logo emblématique.",

@@ -31,7 +31,15 @@
             </div>
           </div>
           <div class="vitrine-visual">
-            <a class="v-disc" id="v-link" href="shop.html" aria-label="Voir le produit"><img id="v-img" src="img/Nike.jpg" alt="" /></a>
+            <!-- Produit détouré (champ "cutout" dans products.js) : il flotte devant le halo.
+                 Sinon : la photo entière dans une carte, bords remplis par la même photo floutée. -->
+            <a class="v-stage" id="v-link" href="shop.html" aria-label="Voir le produit">
+              <span class="v-orb" aria-hidden="true"></span>
+              <span class="v-photo">
+                <img class="v-blur" id="v-blur" src="img/Nike.jpg" alt="" aria-hidden="true" />
+                <img id="v-img" src="img/Nike.jpg" alt="" />
+              </span>
+            </a>
           </div>
         </div>
         <div class="container">

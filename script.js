@@ -1017,8 +1017,11 @@ function initVitrine() {
     $$(".v-thumb", thumbs).forEach((b, j) => b.setAttribute("aria-selected", j === index));
     glowFor(p, (c) => root.style.setProperty("--glow", c));
     const fill = () => {
-      img.src = imgSrc(p.image);
+      // Produit détouré s'il existe, sinon la photo entière avec un fond flouté
+      img.src = imgSrc(p.cutout || p.image);
       img.alt = p.name;
+      $("#v-blur").src = imgSrc(p.image);
+      disc.classList.toggle("is-cutout", Boolean(p.cutout));
       disc.href = `sproduct.html?id=${p.id}`;
       $("#v-kicker").textContent = p.badge || CATEGORIES[p.category];
       $("#v-name").textContent = p.name;

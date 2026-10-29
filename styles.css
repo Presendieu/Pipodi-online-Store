@@ -468,7 +468,7 @@ h4 {
   gap: 10px;
 }
 .vitrine-text > *,
-.v-disc img {
+.v-photo {
   transition:
     opacity 0.28s,
     transform 0.5s var(--ease);
@@ -477,31 +477,76 @@ h4 {
   opacity: 0;
   transform: translateY(8px);
 }
-.vitrine.swap .v-disc img {
+.vitrine.swap .v-photo {
   opacity: 0;
-  transform: scale(1.12) rotate(-6deg);
+  transform: scale(0.9) rotate(-6deg);
 }
 .vitrine-visual {
   display: grid;
   place-items: center;
 }
-.v-disc {
-  display: block;
-  width: min(440px, 86%);
+/* Scène du produit : un halo lumineux rond derrière */
+.v-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(460px, 88%);
   aspect-ratio: 1;
+  animation: float 6s ease-in-out infinite alternate;
+}
+.v-orb {
+  position: absolute;
+  inset: 6%;
   border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--glow) 70%, #fff 10%), color-mix(in srgb, var(--glow) 35%, transparent) 55%, transparent 72%);
+  box-shadow: 0 0 120px color-mix(in srgb, var(--glow) 40%, transparent);
+  transition:
+    background 0.8s,
+    box-shadow 0.8s;
+}
+/* Photo normale : affichée entière (aucune coupe), bords remplis par la même photo floutée */
+.v-photo {
+  position: relative;
+  width: 78%;
+  aspect-ratio: 1;
   overflow: hidden;
+  border-radius: 28px;
   background: var(--surface);
   box-shadow:
-    0 0 0 10px rgba(255, 255, 255, 0.04),
-    0 40px 100px color-mix(in srgb, var(--glow) 45%, transparent);
-  animation: float 6s ease-in-out infinite alternate;
-  transition: box-shadow 0.8s;
+    0 0 0 1px rgba(255, 255, 255, 0.12),
+    0 40px 80px rgba(0, 0, 0, 0.55);
+  rotate: -3deg;
 }
-.v-disc img {
+.v-blur {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  filter: blur(22px) saturate(1.2) brightness(0.8);
+  transform: scale(1.25);
+}
+#v-img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+/* Produit détouré : il flotte seul devant le halo, avec une ombre douce */
+.v-stage.is-cutout .v-photo {
+  width: 92%;
+  overflow: visible;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  rotate: -8deg;
+}
+.v-stage.is-cutout .v-blur {
+  display: none;
+}
+.v-stage.is-cutout #v-img {
+  filter: drop-shadow(0 34px 34px rgba(0, 0, 0, 0.55));
 }
 @keyframes float {
   to {
@@ -1721,8 +1766,8 @@ h4 {
     order: -1;
     padding-block: 12px 8px;
   }
-  .v-disc {
-    width: min(360px, 78%);
+  .v-stage {
+    width: min(380px, 84%);
   }
   .categories {
     grid-template-columns: repeat(2, 1fr);
