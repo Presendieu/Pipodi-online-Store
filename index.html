@@ -26,63 +26,38 @@
     <header id="site-header"></header>
 
     <main>
-      <section class="hero-carousel" aria-roledescription="carrousel" aria-label="À la une">
-        <div class="hero-track" id="hero-track">
-          <div class="slide slide-photo" role="group" aria-roledescription="slide" aria-label="1 sur 3">
-            <div class="container">
-              <div class="hero-content">
-                <span class="eyebrow">Nouvelle collection</span>
-                <h1 class="hero-title">Le style que vous aimez, <span class="accent">livré chez vous.</span></h1>
-                <p>Chaussures, vêtements, accessoires et électronique des marques que vous aimez. Commandez en quelques clics, on s'occupe du reste.</p>
-                <div class="hero-actions">
-                  <a href="shop.html" class="btn btn-primary">Découvrir la boutique <i class="fa-solid fa-arrow-right"></i></a>
-                  <a href="#nouveautes" class="btn btn-outline">Nouveautés</a>
-                </div>
-              </div>
+      <section class="container hero-bento">
+        <div class="bento-main reveal">
+          <div class="bento-main-text">
+            <span class="pill"><span class="pill-dot"></span> Nouvelle collection</span>
+            <h1 class="hero-title">Tout ce que vous aimez, <span class="accent">livré chez vous.</span></h1>
+            <p>Mode, sneakers, accessoires et électronique des marques que vous aimez. Commandez en quelques clics, on s'occupe du reste.</p>
+            <div class="hero-actions">
+              <a href="shop.html" class="btn btn-primary">Découvrir la boutique <i class="fa-solid fa-arrow-right"></i></a>
+              <a href="#nouveautes" class="btn btn-ghost">Nouveautés</a>
             </div>
           </div>
-
-          <div class="slide slide-sun" role="group" aria-roledescription="slide" aria-label="2 sur 3">
-            <span class="blob blob-white" style="top: -120px; left: -80px"></span>
-            <span class="blob blob-orange" style="bottom: -160px; right: 10%"></span>
-            <div class="container slide-grid">
-              <div class="hero-content">
-                <span class="eyebrow">Sneakers du moment</span>
-                <h2 class="hero-title">Des paires qui font <span>la différence.</span></h2>
-                <p>Nike, Adidas, Yeezy… Les modèles les plus demandés, livrés partout en Haïti.</p>
-                <div class="hero-actions">
-                  <a href="shop.html?cat=chaussures" class="btn btn-dark">Voir les chaussures <i class="fa-solid fa-arrow-right"></i></a>
-                </div>
-              </div>
-              <div class="slide-visual" aria-hidden="true">
-                <img class="float-card card-a" src="img/Nike.jpg" alt="" />
-                <img class="float-card card-b" src="img/White%20Yeezy.jpg" alt="" />
-              </div>
-            </div>
-          </div>
-
-          <div class="slide slide-night" role="group" aria-roledescription="slide" aria-label="3 sur 3">
-            <span class="blob blob-sky" style="top: -140px; right: -60px"></span>
-            <span class="blob blob-orange" style="bottom: -200px; left: 20%; opacity: 0.35"></span>
-            <div class="container slide-grid">
-              <div class="hero-content">
-                <span class="eyebrow">Électronique</span>
-                <h2 class="hero-title">La tech, <span>sans la galère.</span></h2>
-                <p>AirPods, chargeurs, claviers, adaptateurs… Commandés pour vous, vérifiés avant livraison.</p>
-                <div class="hero-actions">
-                  <a href="shop.html?cat=electronique" class="btn btn-light">Voir l'électronique <i class="fa-solid fa-arrow-right"></i></a>
-                </div>
-              </div>
-              <div class="slide-visual" aria-hidden="true">
-                <img class="float-card card-a" src="img/APPLE%20AirPods%20Max%20Argent%20-%20Casque.jpg" alt="" />
-                <img class="float-card card-b" src="img/Chargeur%20Apple%20Watch.jpg" alt="" />
-              </div>
-            </div>
-          </div>
+          <img class="bento-main-img" src="img/hero.webp" alt="" />
         </div>
-        <button class="hero-arrow prev" data-hero-step="-1" aria-label="Slide précédente"><i class="fa-solid fa-chevron-left"></i></button>
-        <button class="hero-arrow next" data-hero-step="1" aria-label="Slide suivante"><i class="fa-solid fa-chevron-right"></i></button>
-        <div class="hero-dots" id="hero-dots"></div>
+
+        <a href="shop.html?cat=chaussures" class="bento-card bento-photo reveal">
+          <img src="img/Nike.jpg" alt="" />
+          <span class="bento-label">Sneakers <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <a href="shop.html?cat=electronique" class="bento-card bento-photo reveal">
+          <img src="img/APPLE%20AirPods%20Max%20Argent%20-%20Casque.jpg" alt="" />
+          <span class="bento-label">Tech <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <a href="https://wa.me/50948262051?text=Bonjour%20Pipodi%20Store%20%F0%9F%91%8B" target="_blank" rel="noopener" class="bento-card bento-wa reveal">
+          <span class="bento-wa-icon"><i class="fa-brands fa-whatsapp"></i></span>
+          <span>
+            <strong>Commandez sur WhatsApp</strong>
+            <small>Une question ? Un article Shein ou Amazon ? On répond vite.</small>
+          </span>
+          <i class="fa-solid fa-arrow-right bento-wa-go"></i>
+        </a>
       </section>
 
       <div class="container">

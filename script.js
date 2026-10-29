@@ -90,8 +90,9 @@ const SIZE_GUIDES = {
   },
 };
 
-// Le menu affiche « Tout » puis une entrée par catégorie (voir CATEGORIES dans products.js)
+// Le menu affiche « Accueil », « Tout » puis une entrée par catégorie (voir CATEGORIES dans products.js)
 const NAV_LINKS = [
+  { href: "index.html", label: "Accueil", cat: "home" },
   { href: "shop.html", label: "Tout", cat: "all" },
   ...Object.entries(CATEGORIES).map(([key, label]) => ({
     href: `shop.html?cat=${key}`,
@@ -166,44 +167,29 @@ function renderHeader() {
   const el = $("#site-header");
   if (!el) return;
 
-  const news = [
-    `<i class="fa-solid fa-truck-fast"></i>Livraison partout en Haïti`,
-    `<i class="fa-brands fa-whatsapp"></i>Commande simple sur WhatsApp`,
-    `<i class="fa-solid fa-mobile-screen"></i>Paiement : ${STORE.payments.join(", ")}`,
-    `<i class="fa-solid fa-earth-americas"></i>On commande pour vous sur Shein, Amazon, Zara…`,
-  ];
-  const newsHtml = news.map((n) => `<span>${n}</span>`).join("");
-
   el.innerHTML = `
-    <div class="topbar">
-      <div class="topbar-marquee">
-        <div class="marquee-track">${newsHtml}${newsHtml.replaceAll("<span>", '<span aria-hidden="true">')}</div>
-      </div>
-      <div class="topbar-tools">
-        <button class="theme-btn" data-theme-toggle aria-label="Changer de thème"></button>
-        <div class="currency-switch" role="group" aria-label="Devise">
-          <button data-currency="USD">USD</button>
-          <button data-currency="HTG">HTG</button>
-        </div>
-      </div>
-    </div>
-    <nav class="nav container">
+    <nav class="nav">
       <a href="index.html" class="nav-logo" aria-label="Accueil Pipodi Store">
         <img src="img/logo.png" alt="Pipodi Store" />
       </a>
       <ul class="nav-links">
         ${NAV_LINKS.map(
           (l) =>
-            `<li><a href="${l.href}" data-nav-cat="${l.cat}" class="${l.cat === currentCat ? "active" : ""}">${l.label}</a></li>`
+            `<li><a href="${l.href}" data-nav-cat="${l.cat}" class="${(l.cat === "home" ? page === "home" : l.cat === currentCat) ? "active" : ""}">${l.label}</a></li>`
         ).join("")}
       </ul>
       <div class="nav-actions">
-        <a href="shop.html#search" class="icon-btn" aria-label="Rechercher"><i class="fa-solid fa-magnifying-glass"></i></a>
-        <a href="shop.html?cat=favs" class="icon-btn" aria-label="Favoris">
+        <a href="shop.html#search" class="icon-btn desktop-only" aria-label="Rechercher"><i class="fa-solid fa-magnifying-glass"></i></a>
+        <a href="shop.html?cat=favs" class="icon-btn desktop-only" aria-label="Favoris">
           <i class="fa-regular fa-heart"></i>
           <span class="count fav-count" hidden>0</span>
         </a>
-        <button class="icon-btn" data-open-cart aria-label="Ouvrir le panier">
+        <button class="icon-btn" data-theme-toggle aria-label="Changer de thème"></button>
+        <div class="currency-switch" role="group" aria-label="Devise">
+          <button data-currency="USD">USD</button>
+          <button data-currency="HTG">HTG</button>
+        </div>
+        <button class="icon-btn icon-btn-dark desktop-only" data-open-cart aria-label="Ouvrir le panier">
           <i class="fa-solid fa-bag-shopping"></i>
           <span class="count cart-count" hidden>0</span>
         </button>
@@ -981,61 +967,9 @@ function initProductPage() {
   updateWa();
 }
 
-// ===== Accueil : carrousel =====
-function initHero() {
-  const track = $("#hero-track");
-  if (!track) return;
-  const slides = [...track.children];
-  const dots = $("#hero-dots");
-  dots.innerHTML = slides
-    .map((_, i) => `<button data-hero-go="${i}" aria-label="Aller à la slide ${i + 1}"></button>`)
-    .join("");
-  let index = 0;
-  let timer;
-
-  const go = (n) => {
-    index = (n + slides.length) % slides.length;
-    track.scrollTo({ left: slides[index].offsetLeft, behavior: reducedMotion ? "auto" : "smooth" });
-  };
-  const sync = () => {
-    index = Math.round(track.scrollLeft / track.clientWidth);
-    $$("button", dots).forEach((d, i) => d.classList.toggle("active", i === index));
-  };
-  const stop = () => clearInterval(timer);
-  const start = () => {
-    stop();
-    if (!reducedMotion) timer = setInterval(() => !document.hidden && go(index + 1), 6000);
-  };
-
-  let ticking = false;
-  track.addEventListener(
-    "scroll",
-    () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        sync();
-        ticking = false;
-      });
-    },
-    { passive: true }
-  );
-  $(".hero-carousel").addEventListener("click", (e) => {
-    const step = e.target.closest("[data-hero-step]");
-    const dot = e.target.closest("[data-hero-go]");
-    if (step) go(index + Number(step.dataset.heroStep));
-    else if (dot) go(Number(dot.dataset.heroGo));
-    else return;
-    start();
-  });
-  // Pause quand le visiteur interagit avec le carrousel
-  ["pointerenter", "focusin", "touchstart"].forEach((ev) => track.parentElement.addEventListener(ev, stop, { passive: true }));
-  ["pointerleave", "focusout"].forEach((ev) => track.parentElement.addEventListener(ev, start));
-  sync();
-  start();
-}
-
+// ===== Accueil : compteurs =====
 function renderCategoryCounts() {
+  $$("[data-total-count]").forEach((el) => (el.textContent = PRODUCTS.length));
   $$("[data-cat-count]").forEach((el) => {
     const n = PRODUCTS.filter((p) => p.category === el.dataset.catCount).length;
     el.textContent = n ? `${n} article${n > 1 ? "s" : ""}` : "";
@@ -1087,7 +1021,6 @@ renderProductGrids();
 renderFaq();
 renderReviews();
 renderCategoryCounts();
-initHero();
 initShop();
 initProductPage();
 updateCounts();
