@@ -105,7 +105,6 @@ const NAV_LINKS = [
 const CART_KEY = "pipodi-cart";
 const FAVS_KEY = "pipodi-favs";
 const CURRENCY_KEY = "pipodi-currency";
-const THEME_KEY = "pipodi-theme";
 
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -170,33 +169,26 @@ function renderHeader() {
   const q = params.get("q") || "";
 
   el.innerHTML = `
-    <div class="utility">
-      <div class="container utility-inner">
-        <p><i class="fa-solid fa-truck-fast"></i> Livraison partout en Haïti<span class="hide-sm"> · Commande sur WhatsApp</span></p>
-        <div class="utility-tools">
-          <button class="theme-btn" data-theme-toggle aria-label="Changer de thème"></button>
-          <div class="currency-switch" role="group" aria-label="Devise">
-            <button data-currency="USD">USD</button>
-            <button data-currency="HTG">HTG</button>
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="nav container">
       <a href="index.html" class="nav-logo" aria-label="Accueil Pipodi Store">
-        <img src="img/logo.png" alt="Pipodi Store" />
+        <span class="nav-logo-tile"><img src="img/logo.png" alt="" /></span>
+        <span class="nav-logo-word">Pipodi<span>.</span></span>
       </a>
       <form class="nav-search" action="shop.html" role="search">
         <i class="fa-solid fa-magnifying-glass"></i>
         <input type="search" name="q" id="nav-search" value="${q.replace(/"/g, "&quot;")}" placeholder="Rechercher un produit, une marque…" aria-label="Rechercher un produit" autocomplete="off" />
       </form>
       <div class="nav-actions">
+        <div class="currency-switch" role="group" aria-label="Devise">
+          <button data-currency="USD">USD</button>
+          <button data-currency="HTG">HTG</button>
+        </div>
         <a href="shop.html?cat=favs" class="icon-btn" aria-label="Favoris">
           <i class="fa-regular fa-heart"></i>
           <span class="count fav-count" hidden>0</span>
         </a>
-        <button class="icon-btn icon-btn-cart" data-open-cart aria-label="Ouvrir le panier">
-          <i class="fa-solid fa-bag-shopping"></i>
+        <button class="cart-pill" data-open-cart aria-label="Ouvrir le panier">
+          <i class="fa-solid fa-bag-shopping"></i><span class="hide-sm">Panier</span>
           <span class="count cart-count" hidden>0</span>
         </button>
       </div>
@@ -211,7 +203,6 @@ function renderHeader() {
     </nav>
   `;
   updateCurrencySwitch();
-  updateThemeButton();
 
   const onScroll = () => el.classList.toggle("scrolled", window.scrollY > 10);
   window.addEventListener("scroll", onScroll, { passive: true });
@@ -224,9 +215,6 @@ function renderFooter() {
   const year = new Date().getFullYear();
 
   el.innerHTML = `
-    <svg class="footer-mornes" viewBox="0 0 1440 70" preserveAspectRatio="none" aria-hidden="true">
-      <path d="M0 70 L0 52 L110 22 L210 46 L340 8 L470 40 L600 18 L720 48 L860 12 L990 42 L1120 20 L1250 46 L1360 26 L1440 40 L1440 70 Z" />
-    </svg>
     <div class="footer-main container">
       <div class="footer-col footer-brand">
         <img src="img/logo.png" alt="Pipodi Store" class="footer-logo" />
@@ -291,26 +279,63 @@ function setCurrency(value) {
   document.dispatchEvent(new Event("currency:change"));
 }
 
-// ===== Thème clair / sombre =====
-// Sans choix enregistré, on suit le réglage du téléphone (voir le script dans <head>)
-const currentTheme = () => document.documentElement.dataset.theme || "light";
+// ===== Halo de couleur =====
+// Couleur par défaut de chaque rayon, utilisée tant que la couleur de la photo n'est pas calculée.
+// Un produit peut aussi imposer sa couleur avec glow: "#e63b2e" dans products.js.
+const CATEGORY_GLOW = {
+  chaussures: "#f37421",
+  vetements: "#d4b04c",
+  accessoires: "#c0814a",
+  electronique: "#4f8cff",
+};
+const glowCache = {};
 
-function updateThemeButton() {
-  const dark = currentTheme() === "dark";
-  $$("[data-theme-toggle]").forEach((b) => {
-    b.innerHTML = `<i class="fa-solid ${dark ? "fa-sun" : "fa-moon"}"></i>`;
-    b.setAttribute("aria-label", dark ? "Passer en mode clair" : "Passer en mode sombre");
-  });
+// Transforme la couleur moyenne d'une photo en couleur de halo lumineuse
+function vividColor(r, g, b) {
+  r /= 255;
+  g /= 255;
+  b /= 255;
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  let h = 0;
+  if (max !== min) {
+    const d = max - min;
+    h = max === r ? (g - b) / d + (g < b ? 6 : 0) : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
+    h *= 60;
+  }
+  const sat = max - min < 0.04 ? 0 : 70;
+  return `hsl(${Math.round(h)} ${sat}% 56%)`;
 }
 
-function applyTheme(theme) {
-  document.documentElement.dataset.theme = theme;
-  updateThemeButton();
+function glowFor(p, apply) {
+  apply(p.glow || glowCache[p.id] || CATEGORY_GLOW[p.category] || "#f37421");
+  if (p.glow || glowCache[p.id]) return;
+  const im = new Image();
+  im.onload = () => {
+    try {
+      const c = document.createElement("canvas");
+      c.width = c.height = 24;
+      const ctx = c.getContext("2d", { willReadFrequently: true });
+      ctx.drawImage(im, 0, 0, 24, 24);
+      const d = ctx.getImageData(0, 0, 24, 24).data;
+      let r = 0, g = 0, b = 0, w = 0;
+      for (let i = 0; i < d.length; i += 4) {
+        const max = Math.max(d[i], d[i + 1], d[i + 2]);
+        const min = Math.min(d[i], d[i + 1], d[i + 2]);
+        const weight = (max ? (max - min) / max : 0) ** 2 + 0.01; // les pixels colorés comptent plus
+        r += d[i] * weight;
+        g += d[i + 1] * weight;
+        b += d[i + 2] * weight;
+        w += weight;
+      }
+      glowCache[p.id] = vividColor(r / w, g / w, b / w);
+      apply(glowCache[p.id]);
+    } catch {
+      // photo illisible (par exemple fichier ouvert en local) : on garde la couleur du rayon
+    }
+  };
+  im.src = imgSrc(p.image);
 }
-
-matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
-  if (!readStore(THEME_KEY, null)) applyTheme(e.matches ? "dark" : "light");
-});
 
 // ===== Favoris =====
 const getFavs = () => readStore(FAVS_KEY).filter((id) => getProduct(id));
@@ -562,7 +587,7 @@ function showToast(html, action) {
 function productCard(p) {
   const badgeClass = { Promo: "badge-promo", Nouveau: "badge-new" }[p.badge] || "";
   return `
-    <article class="product-card reveal">
+    <article class="product-card reveal" style="--glow: ${p.glow || CATEGORY_GLOW[p.category] || "#f37421"}">
       <div class="product-media">
         <a href="sproduct.html?id=${p.id}" tabindex="-1" aria-hidden="true">
           <img src="${imgSrc(p.image)}" alt="" loading="lazy" />
@@ -673,12 +698,6 @@ function openSizeGuide(category) {
 
 // ===== Clics globaux (délégation) =====
 document.addEventListener("click", (e) => {
-  if (e.target.closest("[data-theme-toggle]")) {
-    const next = currentTheme() === "dark" ? "light" : "dark";
-    writeStore(THEME_KEY, next);
-    applyTheme(next);
-    return;
-  }
   const cur = e.target.closest("[data-currency]");
   if (cur) {
     setCurrency(cur.dataset.currency);
@@ -806,6 +825,7 @@ function initProductPage() {
   const stock = availability(p);
   const hasGuide = p.sizes && SIZE_GUIDES[p.category];
   document.title = `${p.name} | ${STORE.name}`;
+  glowFor(p, (c) => document.body.style.setProperty("--glow", c));
   // Dans la rangée de catégories, on surligne le rayon du produit
   $$("[data-nav-cat]").forEach((a) => a.classList.toggle("active", a.dataset.navCat === p.category));
 
@@ -965,17 +985,90 @@ function initProductPage() {
   updateWa();
 }
 
+// ===== Accueil : vitrine =====
+function initVitrine() {
+  const root = $("#vitrine");
+  if (!root) return;
+  let list = PRODUCTS.filter((p) => p.tags && p.tags.includes("vitrine"));
+  if (!list.length) list = PRODUCTS.slice(0, 6);
+  const img = $("#v-img");
+  const disc = $("#v-link");
+  const thumbs = $("#v-thumbs");
+  let index = 0;
+  let timer;
+
+  thumbs.innerHTML = list
+    .map(
+      (p, i) =>
+        `<button class="v-thumb" role="tab" data-i="${i}" aria-selected="false"><img src="${imgSrc(p.image)}" alt="" />${p.name}</button>`
+    )
+    .join("");
+
+  const needsChoice = (p) => (p.sizes && p.sizes.length) || (p.colors && p.colors.length);
+  const updateWa = () => {
+    const p = list[index];
+    $("#v-wa").href = whatsappLink(`Bonjour Pipodi Store, je voudrais commander :\n• ${p.name} – ${formatPrice(p.price)}`);
+  };
+
+  const show = (i, instant) => {
+    index = (i + list.length) % list.length;
+    const p = list[index];
+    $$(".v-thumb", thumbs).forEach((b, j) => b.setAttribute("aria-selected", j === index));
+    glowFor(p, (c) => root.style.setProperty("--glow", c));
+    const fill = () => {
+      img.src = imgSrc(p.image);
+      img.alt = p.name;
+      disc.href = `sproduct.html?id=${p.id}`;
+      $("#v-kicker").textContent = p.badge || CATEGORIES[p.category];
+      $("#v-name").textContent = p.name;
+      $("#v-desc").textContent = p.description;
+      $("#v-price").innerHTML = priceTag(p.price) + (p.oldPrice ? priceTag(p.oldPrice, "s") : "");
+      $("#v-add").innerHTML = needsChoice(p)
+        ? `<i class="fa-solid fa-ruler"></i> Choisir ma taille`
+        : `<i class="fa-solid fa-bag-shopping"></i> Ajouter au panier`;
+      updateWa();
+      root.classList.remove("swap");
+    };
+    if (instant || reducedMotion) return fill();
+    root.classList.add("swap");
+    setTimeout(fill, 280);
+  };
+
+  const stop = () => clearInterval(timer);
+  const start = () => {
+    stop();
+    if (!reducedMotion) timer = setInterval(() => !document.hidden && show(index + 1), 5000);
+  };
+
+  thumbs.addEventListener("click", (e) => {
+    const b = e.target.closest(".v-thumb");
+    if (!b) return;
+    show(Number(b.dataset.i));
+    stop();
+  });
+  $("#v-add").addEventListener("click", () => {
+    const p = list[index];
+    stop();
+    if (needsChoice(p)) location.href = `sproduct.html?id=${p.id}`;
+    else addToCart(p.id, 1, null, null, img);
+  });
+  root.addEventListener("pointerenter", stop);
+  root.addEventListener("pointerleave", start);
+  document.addEventListener("currency:change", updateWa);
+  show(0, true);
+  start();
+}
+
 // ===== Accueil : rayons (avec vos propres photos produits) =====
 function renderCategoryBlocks() {
   const el = $("#category-blocks");
   if (!el) return;
-  const colors = { chaussures: "yellow", vetements: "sky", accessoires: "orange", electronique: "teal" };
   el.innerHTML = Object.entries(CATEGORIES)
     .map(([key, label]) => {
       const items = PRODUCTS.filter((p) => p.category === key);
       const thumbs = items.slice(0, 3);
       return `
-      <a href="shop.html?cat=${key}" class="category cat-${colors[key] || "yellow"} reveal">
+      <a href="shop.html?cat=${key}" class="category reveal" style="--glow: ${CATEGORY_GLOW[key] || "#f37421"}">
         <div class="category-text">
           <h3>${label}</h3>
           <span>${items.length} article${items.length > 1 ? "s" : ""}</span>
@@ -1033,6 +1126,7 @@ renderProductGrids();
 renderFaq();
 renderReviews();
 renderCategoryBlocks();
+initVitrine();
 initShop();
 initProductPage();
 updateCounts();

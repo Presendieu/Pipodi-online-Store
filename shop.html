@@ -5,18 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Boutique | Pipodi Store</title>
     <meta name="description" content="Tous les produits Pipodi Store : chaussures, vêtements, accessoires et électronique, livrés partout en Haïti." />
-    <meta name="theme-color" content="#f8cf2c" />
+    <meta name="theme-color" content="#0c0c0f" />
     <link rel="icon" href="img/logo.png" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" referrerpolicy="no-referrer" />
-    <script>
-      // Applique le thème (clair/sombre) avant l'affichage pour éviter un flash
-      (function () {
-        var t = null;
-        try { t = JSON.parse(localStorage.getItem("pipodi-theme")); } catch (e) {}
-        if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-        document.documentElement.dataset.theme = t;
-      })();
-    </script>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body data-page="shop">

@@ -3,7 +3,8 @@
 // category : "chaussures" | "vetements" | "accessoires" | "electronique"
 // badge (optionnel) : "Nouveau" | "Promo" | "Populaire"
 // oldPrice (optionnel) : ancien prix barré
-// tags : "featured" = Produits vedettes (accueil), "new" = Nouveautés (accueil)
+// tags : "vitrine" = mis en avant en grand en haut de l'accueil,
+//        "featured" = Produits vedettes (accueil), "new" = Nouveautés (accueil)
 //
 // Champs optionnels pour enrichir la fiche produit :
 // images : ["img/photo2.jpg", "img/photo3.jpg"]  → photos supplémentaires (galerie)
@@ -19,7 +20,7 @@ const PRODUCTS = [
     price: 130,
     image: "img/Nike.jpg",
     badge: "Populaire",
-    tags: ["featured"],
+    tags: ["vitrine", "featured"],
     sizes: ["38", "39", "40", "41", "42", "43", "44"],
     description:
       "Le grand classique noir et blanc. Cuir lisse, semelle en caoutchouc et confort au quotidien : la paire qui va avec tout.",
@@ -31,7 +32,7 @@ const PRODUCTS = [
     category: "electronique",
     price: 549,
     image: "img/APPLE AirPods Max Argent - Casque.jpg",
-    tags: ["featured"],
+    tags: ["vitrine", "featured"],
     description:
       "Casque sans fil Apple avec réduction de bruit active, audio spatial et jusqu'à 20 heures d'autonomie.",
   },
@@ -43,7 +44,7 @@ const PRODUCTS = [
     price: 220,
     image: "img/White Yeezy.jpg",
     badge: "Nouveau",
-    tags: ["new"],
+    tags: ["vitrine", "new"],
     sizes: ["39", "40", "41", "42", "43", "44"],
     description:
       "Montante, épurée et ultra-confortable grâce à la semelle Boost. Une pièce forte pour vos tenues streetwear.",
@@ -135,7 +136,7 @@ const PRODUCTS = [
     price: 150,
     image: "img/bag.jpg",
     badge: "Nouveau",
-    tags: ["new"],
+    tags: ["vitrine", "new"],
     description: "Sac à main noir élégant, assez grand pour le quotidien.",
   },
   {
@@ -145,7 +146,7 @@ const PRODUCTS = [
     category: "vetements",
     price: 180,
     image: "img/Fendi T-shirt In Nero _ ModeSens.jpg",
-    tags: ["new"],
+    tags: ["vitrine", "new"],
     sizes: ["S", "M", "L", "XL"],
     description: "T-shirt Fendi en coton noir, logo emblématique.",
   },
@@ -188,7 +189,7 @@ const PRODUCTS = [
     category: "chaussures",
     price: 110,
     image: "img/Nike air force one.jpg",
-    tags: ["new"],
+    tags: ["vitrine", "new"],
     sizes: ["36", "37", "38", "39", "40", "41"],
     description: "L'icône intemporelle de Nike, en version femme.",
   },

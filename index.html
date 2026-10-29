@@ -8,119 +8,42 @@
     <meta property="og:title" content="Pipodi Store" />
     <meta property="og:description" content="Mode, chaussures, accessoires et électronique livrés partout en Haïti." />
     <meta property="og:image" content="img/logo.png" />
-    <meta name="theme-color" content="#f8cf2c" />
+    <meta name="theme-color" content="#0c0c0f" />
     <link rel="icon" href="img/logo.png" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" referrerpolicy="no-referrer" />
-    <script>
-      // Applique le thème (clair/sombre) avant l'affichage pour éviter un flash
-      (function () {
-        var t = null;
-        try { t = JSON.parse(localStorage.getItem("pipodi-theme")); } catch (e) {}
-        if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-        document.documentElement.dataset.theme = t;
-      })();
-    </script>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body data-page="home">
     <header id="site-header"></header>
 
     <main>
-      <!-- En-tête de l'accueil : texte + collage de vos produits -->
-      <section class="hero">
-        <!-- Le décor raconte l'histoire : du monde entier (avion) jusqu'à chez vous en Haïti (village) -->
-        <svg class="hero-scene" viewBox="0 0 1440 300" preserveAspectRatio="xMaxYMax slice" aria-hidden="true">
-          <g class="scene-stars">
-            <circle cx="260" cy="40" r="2" /><circle cx="540" cy="90" r="1.6" /><circle cx="690" cy="22" r="2.2" />
-            <circle cx="880" cy="60" r="1.6" /><circle cx="1180" cy="30" r="2" /><circle cx="1330" cy="80" r="1.8" />
-          </g>
-          <circle class="scene-sun" cx="1010" cy="150" r="105" />
-
-          <!-- Mer + avion de départ -->
-          <rect class="scene-sea" x="0" y="222" width="460" height="80" />
-          <path class="scene-wave" d="M60 248 q 15 -10 30 0 t 30 0 M190 266 q 15 -10 30 0 t 30 0 M300 244 q 15 -10 30 0 t 30 0" />
-          <g class="scene-sticker">
-            <rect x="110" y="22" width="232" height="34" rx="17" />
-            <text x="226" y="45">Shein · Amazon · Zara</text>
-          </g>
-          <path class="scene-plane" d="M150 82 L205 92 L150 106 L160 92 Z" />
-
-          <!-- Le trajet jusqu'à chez vous -->
-          <path class="scene-route" d="M212 92 C 460 10, 780 20, 1000 82 S 1170 168, 1192 206" />
-          <g class="scene-bag bag-sky" transform="translate(470 38) rotate(-8)"><path d="M-9 -12 q0 -13 9 -13 q9 0 9 13" /><rect x="-17" y="-12" width="34" height="30" rx="4" /></g>
-          <g class="scene-bag bag-yellow" transform="translate(760 34) rotate(6)"><path d="M-9 -12 q0 -13 9 -13 q9 0 9 13" /><rect x="-17" y="-12" width="34" height="30" rx="4" /></g>
-          <g class="scene-bag bag-orange" transform="translate(1020 96) rotate(-4)"><path d="M-9 -12 q0 -13 9 -13 q9 0 9 13" /><rect x="-17" y="-12" width="34" height="30" rx="4" /></g>
-
-          <!-- Les mornes -->
-          <path class="scene-m1" d="M300 236 L420 150 L540 205 L680 110 L820 195 L960 128 L1100 200 L1240 140 L1440 190 L1440 300 L300 300 Z" />
-          <path class="scene-m2" d="M380 262 L520 200 L660 250 L820 180 L980 255 L1120 205 L1300 250 L1440 225 L1440 300 L380 300 Z" />
-          <rect class="scene-sand" x="380" y="272" width="1062" height="30" />
-
-          <!-- Le village -->
-          <g class="scene-house">
-            <rect x="1060" y="226" width="58" height="48" fill="#ff9a57" /><polygon points="1052,229 1089,198 1126,229" fill="#e5484d" />
-            <rect class="scene-window" x="1072" y="238" width="12" height="12" /><rect x="1094" y="248" width="14" height="26" fill="#111" />
-          </g>
-          <g class="scene-house">
-            <rect x="1138" y="214" width="68" height="60" fill="#8fdcff" /><polygon points="1130,217 1172,182 1214,217" fill="#ffd23f" />
-            <rect class="scene-window" x="1150" y="228" width="14" height="14" /><rect class="scene-window" x="1180" y="228" width="14" height="14" />
-          </g>
-          <g class="scene-house">
-            <rect x="1226" y="230" width="54" height="44" fill="#ffd23f" /><polygon points="1219,233 1253,205 1287,233" fill="#0b4a5e" />
-            <rect class="scene-window" x="1240" y="242" width="12" height="12" />
-          </g>
-          <g class="scene-sticker scene-sticker-home">
-            <rect x="1146" y="112" width="196" height="34" rx="17" />
-            <text x="1244" y="135">Chez vous, en Haïti</text>
-          </g>
-
-          <!-- Palmiers -->
-          <g class="scene-palm">
-            <path class="trunk-line" d="M1372 276 Q1362 222 1388 168" /><path class="trunk" d="M1372 276 Q1362 222 1388 168" />
-            <path class="leaf" d="M1388 168 q -40 -26 -82 2 q 44 -6 82 -2 Z" /><path class="leaf" d="M1388 168 q 40 -28 82 0 q -44 -6 -82 0 Z" />
-            <path class="leaf" d="M1388 168 q -14 -42 -58 -46 q 34 14 58 46 Z" /><path class="leaf" d="M1388 168 q 22 -42 66 -40 q -38 10 -66 40 Z" />
-          </g>
-          <g class="scene-palm">
-            <path class="trunk-line" d="M430 278 Q440 236 418 196" /><path class="trunk" d="M430 278 Q440 236 418 196" />
-            <path class="leaf" d="M418 196 q -38 -22 -74 4 q 40 -6 74 -4 Z" /><path class="leaf" d="M418 196 q 36 -26 74 -2 q -40 -4 -74 2 Z" />
-            <path class="leaf" d="M418 196 q -10 -38 -50 -42 q 30 14 50 42 Z" />
-          </g>
-        </svg>
-
-        <div class="container hero-grid">
-          <div class="hero-text">
-            <span class="sticker sticker-sky">Livré partout en Haïti</span>
-            <h1 class="hero-title">Tout ce que vous aimez, <mark>livré</mark> chez vous.</h1>
-            <p>Sneakers, mode, accessoires et électronique. Vous choisissez, vous commandez sur WhatsApp, on vous livre.</p>
-            <div class="hero-actions">
-              <a href="shop.html" class="btn btn-primary">Voir la boutique <i class="fa-solid fa-arrow-right"></i></a>
-              <a href="#comment-commander" class="btn btn-secondary">Comment ça marche ?</a>
+      <!-- Vitrine : un produit à la fois, en grand, avec un halo à sa couleur (produits tagués "vitrine" dans products.js) -->
+      <section class="vitrine" id="vitrine" aria-label="À la une">
+        <div class="container vitrine-grid">
+          <div class="vitrine-text">
+            <span class="kicker"><i></i> <span id="v-kicker">À la une</span></span>
+            <h1 class="v-name" id="v-name">Pipodi Store</h1>
+            <p class="v-desc" id="v-desc">Mode, sneakers, accessoires et électronique livrés partout en Haïti.</p>
+            <div class="v-price" id="v-price"></div>
+            <div class="v-actions">
+              <button class="btn btn-light" id="v-add"><i class="fa-solid fa-bag-shopping"></i> Ajouter au panier</button>
+              <a class="btn btn-whatsapp" id="v-wa" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Commander sur WhatsApp</a>
             </div>
           </div>
-          <div class="hero-collage" aria-hidden="true">
-            <a href="sproduct.html?id=nike-dunk-panda" class="polaroid p1"><img src="img/Nike.jpg" alt="" /><span>Nike Dunk</span></a>
-            <a href="sproduct.html?id=airpods-max" class="polaroid p2"><img src="img/APPLE%20AirPods%20Max%20Argent%20-%20Casque.jpg" alt="" /><span>AirPods Max</span></a>
-            <a href="sproduct.html?id=sac-kate-spade" class="polaroid p3"><img src="img/bag.jpg" alt="" /><span>Kate Spade</span></a>
-            <a href="sproduct.html?id=yeezy-750-white" class="polaroid p4"><img src="img/White%20Yeezy.jpg" alt="" /><span>Yeezy 750</span></a>
-            <span class="burst">NEW</span>
+          <div class="vitrine-visual">
+            <a class="v-disc" id="v-link" href="shop.html" aria-label="Voir le produit"><img id="v-img" src="img/Nike.jpg" alt="" /></a>
           </div>
         </div>
-      </section>
-
-      <!-- Bandeau défilant -->
-      <div class="ticker" aria-hidden="true">
-        <div class="ticker-track">
-          <span>Livraison partout en Haïti</span><span>Commande sur WhatsApp</span><span>Paiement MonCash · NatCash · espèces</span><span>On commande pour vous sur Shein, Amazon, Zara</span>
-          <span>Livraison partout en Haïti</span><span>Commande sur WhatsApp</span><span>Paiement MonCash · NatCash · espèces</span><span>On commande pour vous sur Shein, Amazon, Zara</span>
+        <div class="container">
+          <div class="v-thumbs" id="v-thumbs" role="tablist" aria-label="Produits à la une"></div>
         </div>
-      </div>
+      </section>
 
       <section class="section container">
         <div class="section-head">
           <h2>Les rayons</h2>
           <a href="shop.html" class="link-arrow">Tout voir <i class="fa-solid fa-arrow-right"></i></a>
         </div>
-        <!-- Blocs générés à partir de vos produits (script.js) -->
         <div class="categories" id="category-blocks"></div>
       </section>
 
@@ -135,7 +58,7 @@
       <section class="section container">
         <div class="promo">
           <div class="promo-content">
-            <span class="sticker sticker-yellow">Service de commande</span>
+            <span class="kicker"><i></i> Service de commande</span>
             <h2>Vu sur Shein, Amazon ou Zara&nbsp;? On vous l'apporte.</h2>
             <p>Envoyez-nous le lien de l'article : on le commande pour vous et on le livre en Haïti. Pas besoin de carte bancaire internationale.</p>
             <a href="https://wa.me/50948262051?text=Bonjour%2C%20je%20voudrais%20commander%20cet%20article%20%3A%20" target="_blank" rel="noopener" class="btn btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Envoyer un lien</a>
@@ -159,17 +82,17 @@
           <h2>Comment commander&nbsp;?</h2>
         </div>
         <ol class="steps">
-          <li class="step step-sky reveal">
+          <li class="step reveal">
             <span class="step-num">1</span>
             <h3>Choisissez</h3>
             <p>Ajoutez vos coups de cœur au panier : taille, couleur, quantité.</p>
           </li>
-          <li class="step step-yellow reveal">
+          <li class="step reveal">
             <span class="step-num">2</span>
             <h3>Envoyez sur WhatsApp</h3>
             <p>Votre commande part en un clic. On confirme le prix, la livraison et le paiement.</p>
           </li>
-          <li class="step step-orange reveal">
+          <li class="step reveal">
             <span class="step-num">3</span>
             <h3>Recevez chez vous</h3>
             <p>On livre à votre porte. Vous payez par mobile ou en espèces.</p>
