@@ -224,6 +224,9 @@ function renderFooter() {
   const year = new Date().getFullYear();
 
   el.innerHTML = `
+    <svg class="footer-mornes" viewBox="0 0 1440 70" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 70 L0 52 L110 22 L210 46 L340 8 L470 40 L600 18 L720 48 L860 12 L990 42 L1120 20 L1250 46 L1360 26 L1440 40 L1440 70 Z" />
+    </svg>
     <div class="footer-main container">
       <div class="footer-col footer-brand">
         <img src="img/logo.png" alt="Pipodi Store" class="footer-logo" />

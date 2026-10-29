@@ -28,6 +28,65 @@
     <main>
       <!-- En-tête de l'accueil : texte + collage de vos produits -->
       <section class="hero">
+        <!-- Le décor raconte l'histoire : du monde entier (avion) jusqu'à chez vous en Haïti (village) -->
+        <svg class="hero-scene" viewBox="0 0 1440 300" preserveAspectRatio="xMaxYMax slice" aria-hidden="true">
+          <g class="scene-stars">
+            <circle cx="260" cy="40" r="2" /><circle cx="540" cy="90" r="1.6" /><circle cx="690" cy="22" r="2.2" />
+            <circle cx="880" cy="60" r="1.6" /><circle cx="1180" cy="30" r="2" /><circle cx="1330" cy="80" r="1.8" />
+          </g>
+          <circle class="scene-sun" cx="1010" cy="150" r="105" />
+
+          <!-- Mer + avion de départ -->
+          <rect class="scene-sea" x="0" y="222" width="460" height="80" />
+          <path class="scene-wave" d="M60 248 q 15 -10 30 0 t 30 0 M190 266 q 15 -10 30 0 t 30 0 M300 244 q 15 -10 30 0 t 30 0" />
+          <g class="scene-sticker">
+            <rect x="110" y="22" width="232" height="34" rx="17" />
+            <text x="226" y="45">Shein · Amazon · Zara</text>
+          </g>
+          <path class="scene-plane" d="M150 82 L205 92 L150 106 L160 92 Z" />
+
+          <!-- Le trajet jusqu'à chez vous -->
+          <path class="scene-route" d="M212 92 C 460 10, 780 20, 1000 82 S 1170 168, 1192 206" />
+          <g class="scene-bag bag-sky" transform="translate(470 38) rotate(-8)"><path d="M-9 -12 q0 -13 9 -13 q9 0 9 13" /><rect x="-17" y="-12" width="34" height="30" rx="4" /></g>
+          <g class="scene-bag bag-yellow" transform="translate(760 34) rotate(6)"><path d="M-9 -12 q0 -13 9 -13 q9 0 9 13" /><rect x="-17" y="-12" width="34" height="30" rx="4" /></g>
+          <g class="scene-bag bag-orange" transform="translate(1020 96) rotate(-4)"><path d="M-9 -12 q0 -13 9 -13 q9 0 9 13" /><rect x="-17" y="-12" width="34" height="30" rx="4" /></g>
+
+          <!-- Les mornes -->
+          <path class="scene-m1" d="M300 236 L420 150 L540 205 L680 110 L820 195 L960 128 L1100 200 L1240 140 L1440 190 L1440 300 L300 300 Z" />
+          <path class="scene-m2" d="M380 262 L520 200 L660 250 L820 180 L980 255 L1120 205 L1300 250 L1440 225 L1440 300 L380 300 Z" />
+          <rect class="scene-sand" x="380" y="272" width="1062" height="30" />
+
+          <!-- Le village -->
+          <g class="scene-house">
+            <rect x="1060" y="226" width="58" height="48" fill="#ff9a57" /><polygon points="1052,229 1089,198 1126,229" fill="#e5484d" />
+            <rect class="scene-window" x="1072" y="238" width="12" height="12" /><rect x="1094" y="248" width="14" height="26" fill="#111" />
+          </g>
+          <g class="scene-house">
+            <rect x="1138" y="214" width="68" height="60" fill="#8fdcff" /><polygon points="1130,217 1172,182 1214,217" fill="#ffd23f" />
+            <rect class="scene-window" x="1150" y="228" width="14" height="14" /><rect class="scene-window" x="1180" y="228" width="14" height="14" />
+          </g>
+          <g class="scene-house">
+            <rect x="1226" y="230" width="54" height="44" fill="#ffd23f" /><polygon points="1219,233 1253,205 1287,233" fill="#0b4a5e" />
+            <rect class="scene-window" x="1240" y="242" width="12" height="12" />
+          </g>
+          <g class="scene-sticker scene-sticker-home">
+            <rect x="1146" y="112" width="196" height="34" rx="17" />
+            <text x="1244" y="135">Chez vous, en Haïti</text>
+          </g>
+
+          <!-- Palmiers -->
+          <g class="scene-palm">
+            <path class="trunk-line" d="M1372 276 Q1362 222 1388 168" /><path class="trunk" d="M1372 276 Q1362 222 1388 168" />
+            <path class="leaf" d="M1388 168 q -40 -26 -82 2 q 44 -6 82 -2 Z" /><path class="leaf" d="M1388 168 q 40 -28 82 0 q -44 -6 -82 0 Z" />
+            <path class="leaf" d="M1388 168 q -14 -42 -58 -46 q 34 14 58 46 Z" /><path class="leaf" d="M1388 168 q 22 -42 66 -40 q -38 10 -66 40 Z" />
+          </g>
+          <g class="scene-palm">
+            <path class="trunk-line" d="M430 278 Q440 236 418 196" /><path class="trunk" d="M430 278 Q440 236 418 196" />
+            <path class="leaf" d="M418 196 q -38 -22 -74 4 q 40 -6 74 -4 Z" /><path class="leaf" d="M418 196 q 36 -26 74 -2 q -40 -4 -74 2 Z" />
+            <path class="leaf" d="M418 196 q -10 -38 -50 -42 q 30 14 50 42 Z" />
+          </g>
+        </svg>
+
         <div class="container hero-grid">
           <div class="hero-text">
             <span class="sticker sticker-sky">Livré partout en Haïti</span>

@@ -430,34 +430,192 @@ h4 {
   display: inline;
 }
 
-/* ===== Accueil : en-tête + collage ===== */
-.hero {
-  border-bottom: var(--border);
-  background-color: var(--bg);
-  background-image:
-    linear-gradient(rgba(17, 17, 17, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(17, 17, 17, 0.06) 1px, transparent 1px);
-  background-size: 32px 32px;
-  overflow: hidden;
+/* ===== Accueil : le décor raconte l'histoire ===== */
+/* Du monde entier (avion, Shein · Amazon · Zara) jusqu'à chez vous en Haïti (mornes, village) */
+:root {
+  --sky-top: #a9e2fb;
+  --sky-mid: #dff4fb;
+  --sky-bottom: #fff1c9;
+  --scene-sun: #ffd23f;
+  --scene-sea: #8fdcff;
+  --scene-m1: #5fb3cf;
+  --scene-m2: #0b4a5e;
+  --scene-sand: #ffd23f;
+  --scene-window: #111;
 }
-:root[data-theme="dark"] .hero {
+:root[data-theme="dark"] {
+  --sky-top: #07111c;
+  --sky-mid: #0f2232;
+  --sky-bottom: #1c3140;
+  --scene-sun: #f7f0de; /* la lune */
+  --scene-sea: #1f5f7a;
+  --scene-m1: #1f5368;
+  --scene-m2: #0b2c38;
+  --scene-sand: #b8932a;
+  --scene-window: #ffd23f; /* fenêtres allumées */
+}
+.hero {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border-bottom: var(--border);
+  background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 45%, var(--sky-bottom) 100%);
+}
+.hero-scene {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: -1;
+  width: 100%;
+  height: 300px;
+  pointer-events: none;
+}
+.hero-scene * {
+  stroke: #111;
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+.scene-sun {
+  fill: var(--scene-sun);
+}
+.scene-sea {
+  fill: var(--scene-sea);
+}
+.scene-wave {
+  fill: none;
+  stroke-width: 2;
+  opacity: 0.6;
+}
+.scene-m1 {
+  fill: var(--scene-m1);
+}
+.scene-m2 {
+  fill: var(--scene-m2);
+}
+.scene-sand {
+  fill: var(--scene-sand);
+}
+.scene-window {
+  fill: var(--scene-window);
+}
+.scene-plane {
+  fill: #fff;
+  animation: plane 3s ease-in-out infinite alternate;
+}
+@keyframes plane {
+  to {
+    transform: translate(6px, -5px);
+  }
+}
+.scene-route {
+  fill: none;
+  stroke-width: 3;
+  stroke-dasharray: 10 10;
+  animation: route 1.4s linear infinite;
+}
+@keyframes route {
+  to {
+    stroke-dashoffset: -20;
+  }
+}
+.scene-bag path {
+  fill: none;
+}
+.bag-sky rect {
+  fill: #12aee8;
+}
+.bag-yellow rect {
+  fill: #ffd23f;
+}
+.bag-orange rect {
+  fill: #f37421;
+}
+.scene-bag {
+  animation: bob 3.2s ease-in-out infinite alternate;
+  transform-box: fill-box;
+}
+.bag-yellow {
+  animation-delay: -1s;
+}
+.bag-orange {
+  animation-delay: -2s;
+}
+@keyframes bob {
+  to {
+    translate: 0 -8px;
+  }
+}
+.scene-sticker rect {
+  fill: #fff;
+}
+.scene-sticker-home rect {
+  fill: var(--scene-sun);
+}
+:root[data-theme="dark"] .scene-sticker-home rect {
+  fill: #ffd23f;
+}
+.scene-sticker text {
+  fill: #111;
+  stroke: none;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  text-anchor: middle;
+}
+.scene-palm .trunk-line {
+  fill: none;
+  stroke-width: 12;
+  stroke-linecap: round;
+}
+.scene-palm .trunk {
+  fill: none;
+  stroke: #8a5a32;
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+.scene-palm .leaf {
+  fill: #2bb673;
+}
+.scene-stars {
+  display: none;
+}
+.scene-stars circle {
+  fill: #f7f0de;
+  stroke: none;
+}
+:root[data-theme="dark"] .scene-stars {
+  display: inline;
+}
+/* Étoiles aussi dans le ciel au-dessus du texte, en mode sombre */
+:root[data-theme="dark"] .hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
   background-image:
-    linear-gradient(rgba(247, 240, 222, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(247, 240, 222, 0.06) 1px, transparent 1px);
+    radial-gradient(1.5px 1.5px at 12% 18%, #f7f0de, transparent),
+    radial-gradient(1.5px 1.5px at 32% 8%, #f7f0de, transparent),
+    radial-gradient(2px 2px at 48% 26%, #f7f0de, transparent),
+    radial-gradient(1.5px 1.5px at 66% 12%, #f7f0de, transparent),
+    radial-gradient(2px 2px at 84% 22%, #f7f0de, transparent),
+    radial-gradient(1.5px 1.5px at 92% 6%, #f7f0de, transparent),
+    radial-gradient(1.5px 1.5px at 22% 40%, #f7f0de, transparent),
+    radial-gradient(1.5px 1.5px at 58% 44%, #f7f0de, transparent);
+  opacity: 0.8;
 }
 .hero-grid {
   display: grid;
   grid-template-columns: 1.1fr 1fr;
   align-items: center;
   gap: 40px;
-  min-height: 560px;
-  padding-block: 56px;
+  min-height: 0;
+  padding-block: 44px 300px; /* toute la hauteur du décor reste libre sous le texte */
 }
 .hero-text .sticker {
   margin-bottom: 22px;
 }
 .hero-title {
-  font-size: clamp(2.8rem, 6.4vw, 5.4rem);
+  font-size: clamp(2.6rem, 5.4vw, 4.6rem);
   line-height: 0.98;
   margin-bottom: 22px;
 }
@@ -484,7 +642,7 @@ h4 {
 }
 .hero-collage {
   position: relative;
-  height: 470px;
+  height: 430px;
 }
 .polaroid {
   position: absolute;
@@ -1640,10 +1798,21 @@ h4 {
 
 /* ===== Pied de page ===== */
 #site-footer {
-  margin-top: 40px;
-  border-top: var(--border);
+  position: relative;
+  margin-top: 110px;
   background: #111;
   color: #d6cfbd;
+}
+.footer-mornes {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% - 1px);
+  width: 100%;
+  height: 70px;
+  fill: #111;
+}
+:root[data-theme="dark"] .footer-mornes {
+  fill: #000;
 }
 :root[data-theme="dark"] #site-footer {
   background: #000;
@@ -1850,7 +2019,7 @@ h4 {
     grid-template-columns: 1fr;
     gap: 24px;
     min-height: 0;
-    padding-block: 40px 48px;
+    padding-block: 40px 220px;
   }
   .hero-collage {
     height: 400px;
@@ -1953,6 +2122,12 @@ h4 {
   }
   .hero-collage {
     height: 330px;
+  }
+  .hero-grid {
+    padding-bottom: 170px;
+  }
+  .hero-scene {
+    height: 220px;
   }
   .polaroid {
     width: 48%;
