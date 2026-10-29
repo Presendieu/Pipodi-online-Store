@@ -303,8 +303,8 @@ function vividColor(r, g, b) {
     h = max === r ? (g - b) / d + (g < b ? 6 : 0) : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
     h *= 60;
   }
-  const sat = max - min < 0.04 ? 0 : 70;
-  return `hsl(${Math.round(h)} ${sat}% 56%)`;
+  if (max - min < 0.1) return null; // photo trop neutre (blanc, gris, noir) : on garde la couleur du rayon
+  return `hsl(${Math.round(h)} 70% 56%)`;
 }
 
 function glowFor(p, apply) {
@@ -328,8 +328,9 @@ function glowFor(p, apply) {
         b += d[i + 2] * weight;
         w += weight;
       }
-      glowCache[p.id] = vividColor(r / w, g / w, b / w);
-      apply(glowCache[p.id]);
+      const color = vividColor(r / w, g / w, b / w);
+      glowCache[p.id] = color || CATEGORY_GLOW[p.category] || "#f37421";
+      if (color) apply(color);
     } catch {
       // photo illisible (par exemple fichier ouvert en local) : on garde la couleur du rayon
     }
