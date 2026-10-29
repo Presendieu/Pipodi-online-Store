@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Boutique | Pipodi Store</title>
     <meta name="description" content="Tous les produits Pipodi Store : chaussures, vêtements, accessoires et électronique, livrés partout en Haïti." />
-    <meta name="theme-color" content="#0b4a5e" />
+    <meta name="theme-color" content="#f8cf2c" />
     <link rel="icon" href="img/logo.png" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" referrerpolicy="no-referrer" />
     <script>
@@ -24,27 +24,17 @@
 
     <main>
       <section class="section container shop-section">
-        <div class="section-head">
+        <div class="shop-head">
           <div>
-            <span class="eyebrow">Boutique</span>
-            <h2>Trouvez votre prochain coup de cœur</h2>
+            <h1 id="shop-title">Toute la boutique</h1>
+            <p class="result-count" id="result-count"></p>
           </div>
+          <select id="sort" class="select" aria-label="Trier">
+            <option value="default">Trier : recommandés</option>
+            <option value="price-asc">Prix croissant</option>
+            <option value="price-desc">Prix décroissant</option>
+          </select>
         </div>
-        <div class="shop-toolbar">
-          <div class="chips" id="filter-chips"></div>
-          <div class="shop-controls">
-            <label class="search-box">
-              <i class="fa-solid fa-magnifying-glass"></i>
-              <input type="search" id="search" placeholder="Rechercher un produit…" aria-label="Rechercher un produit" />
-            </label>
-            <select id="sort" class="select" aria-label="Trier">
-              <option value="default">Trier : recommandés</option>
-              <option value="price-asc">Prix croissant</option>
-              <option value="price-desc">Prix décroissant</option>
-            </select>
-          </div>
-        </div>
-        <p class="result-count" id="result-count"></p>
         <div class="product-grid" id="shop-grid"></div>
       </section>
     </main>

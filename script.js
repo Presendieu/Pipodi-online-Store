@@ -90,7 +90,7 @@ const SIZE_GUIDES = {
   },
 };
 
-// Le menu affiche « Accueil », « Tout » puis une entrée par catégorie (voir CATEGORIES dans products.js)
+// Rangée de catégories sous l'en-tête : Accueil, Tout, chaque catégorie (voir products.js) et Favoris
 const NAV_LINKS = [
   { href: "index.html", label: "Accueil", cat: "home" },
   { href: "shop.html", label: "Tout", cat: "all" },
@@ -99,6 +99,7 @@ const NAV_LINKS = [
     label,
     cat: key,
   })),
+  { href: "shop.html?cat=favs", label: '<i class="fa-solid fa-heart"></i> Favoris', cat: "favs" },
 ];
 
 const CART_KEY = "pipodi-cart";
@@ -162,38 +163,51 @@ const params = new URLSearchParams(location.search);
 const page = document.body.dataset.page;
 const currentCat = page === "shop" ? params.get("cat") || "all" : null;
 
-// ===== En-tête, barre mobile & pied de page (communs à toutes les pages) =====
+// ===== En-tête & pied de page (communs à toutes les pages) =====
 function renderHeader() {
   const el = $("#site-header");
   if (!el) return;
+  const q = params.get("q") || "";
 
   el.innerHTML = `
-    <nav class="nav">
+    <div class="utility">
+      <div class="container utility-inner">
+        <p><i class="fa-solid fa-truck-fast"></i> Livraison partout en Haïti<span class="hide-sm"> · Commande sur WhatsApp</span></p>
+        <div class="utility-tools">
+          <button class="theme-btn" data-theme-toggle aria-label="Changer de thème"></button>
+          <div class="currency-switch" role="group" aria-label="Devise">
+            <button data-currency="USD">USD</button>
+            <button data-currency="HTG">HTG</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nav container">
       <a href="index.html" class="nav-logo" aria-label="Accueil Pipodi Store">
         <img src="img/logo.png" alt="Pipodi Store" />
       </a>
-      <ul class="nav-links">
+      <form class="nav-search" action="shop.html" role="search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="search" name="q" id="nav-search" value="${q.replace(/"/g, "&quot;")}" placeholder="Rechercher un produit, une marque…" aria-label="Rechercher un produit" autocomplete="off" />
+      </form>
+      <div class="nav-actions">
+        <a href="shop.html?cat=favs" class="icon-btn" aria-label="Favoris">
+          <i class="fa-regular fa-heart"></i>
+          <span class="count fav-count" hidden>0</span>
+        </a>
+        <button class="icon-btn icon-btn-cart" data-open-cart aria-label="Ouvrir le panier">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span class="count cart-count" hidden>0</span>
+        </button>
+      </div>
+    </div>
+    <nav class="cat-nav" aria-label="Rayons">
+      <ul class="container">
         ${NAV_LINKS.map(
           (l) =>
             `<li><a href="${l.href}" data-nav-cat="${l.cat}" class="${(l.cat === "home" ? page === "home" : l.cat === currentCat) ? "active" : ""}">${l.label}</a></li>`
         ).join("")}
       </ul>
-      <div class="nav-actions">
-        <a href="shop.html#search" class="icon-btn desktop-only" aria-label="Rechercher"><i class="fa-solid fa-magnifying-glass"></i></a>
-        <a href="shop.html?cat=favs" class="icon-btn desktop-only" aria-label="Favoris">
-          <i class="fa-regular fa-heart"></i>
-          <span class="count fav-count" hidden>0</span>
-        </a>
-        <button class="icon-btn" data-theme-toggle aria-label="Changer de thème"></button>
-        <div class="currency-switch" role="group" aria-label="Devise">
-          <button data-currency="USD">USD</button>
-          <button data-currency="HTG">HTG</button>
-        </div>
-        <button class="icon-btn icon-btn-dark desktop-only" data-open-cart aria-label="Ouvrir le panier">
-          <i class="fa-solid fa-bag-shopping"></i>
-          <span class="count cart-count" hidden>0</span>
-        </button>
-      </div>
     </nav>
   `;
   updateCurrencySwitch();
@@ -202,34 +216,6 @@ function renderHeader() {
   const onScroll = () => el.classList.toggle("scrolled", window.scrollY > 10);
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
-}
-
-function renderBottomNav() {
-  const isSearch = location.hash === "#search";
-  const items = [
-    { href: "index.html", icon: "fa-house", label: "Accueil", active: page === "home" },
-    { href: "shop.html", icon: "fa-store", label: "Boutique", active: page === "shop" && currentCat !== "favs" && !isSearch },
-    { href: "shop.html#search", icon: "fa-magnifying-glass", label: "Recherche", active: isSearch },
-    { href: "shop.html?cat=favs", icon: "fa-heart", label: "Favoris", active: currentCat === "favs", badge: "fav-count" },
-  ];
-  const nav = document.createElement("nav");
-  nav.className = "bottom-nav";
-  nav.setAttribute("aria-label", "Navigation principale");
-  nav.innerHTML =
-    items
-      .map(
-        (i) => `
-      <a href="${i.href}" class="${i.active ? "active" : ""}">
-        <span class="bn-icon"><i class="fa-solid ${i.icon}"></i>${i.badge ? `<span class="count ${i.badge}" hidden>0</span>` : ""}</span>
-        ${i.label}
-      </a>`
-      )
-      .join("") +
-    `<button data-open-cart>
-        <span class="bn-icon"><i class="fa-solid fa-bag-shopping"></i><span class="count cart-count" hidden>0</span></span>
-        Panier
-      </button>`;
-  document.body.appendChild(nav);
 }
 
 function renderFooter() {
@@ -385,7 +371,7 @@ function addToCart(id, qty = 1, size = null, color = null, sourceImg = null) {
 
 // La photo du produit « vole » jusqu'à l'icône du panier visible (en-tête ou barre du bas)
 function flyToCart(img) {
-  const target = $$(".nav-actions [data-open-cart], .bottom-nav [data-open-cart]").find(
+  const target = $$(".nav-actions [data-open-cart]").find(
     (el) => el.getBoundingClientRect().width > 0
   );
   if (!img || !target || reducedMotion || !img.animate) return Promise.resolve();
@@ -740,12 +726,8 @@ function initShop() {
   const grid = $("#shop-grid");
   if (!grid) return;
 
-  const state = { cat: currentCat, q: "", sort: "default" };
-
-  const chips = $("#filter-chips");
-  chips.innerHTML = [["all", "Tout"], ...Object.entries(CATEGORIES), ["favs", `<i class="fa-solid fa-heart"></i> Favoris`]]
-    .map(([key, label]) => `<button class="chip" data-cat="${key}">${label}</button>`)
-    .join("");
+  const state = { cat: currentCat, q: params.get("q") || "", sort: "default" };
+  const search = $("#nav-search");
 
   const emptyState = () =>
     state.cat === "favs" && !state.q
@@ -763,7 +745,10 @@ function initShop() {
     if (state.sort === "price-asc") list = [...list].sort((a, b) => a.price - b.price);
     if (state.sort === "price-desc") list = [...list].sort((a, b) => b.price - a.price);
 
-    $$(".chip", chips).forEach((c) => c.classList.toggle("active", c.dataset.cat === state.cat));
+    $("#shop-title").innerHTML =
+      state.q.trim() ? `Résultats pour « ${state.q.trim().replace(/</g, "&lt;")} »`
+      : state.cat === "favs" ? "Mes favoris"
+      : CATEGORIES[state.cat] || "Toute la boutique";
     $$("[data-nav-cat]").forEach((a) => a.classList.toggle("active", a.dataset.navCat === state.cat));
     $("#result-count").textContent = `${list.length} produit${list.length > 1 ? "s" : ""}`;
     grid.innerHTML = list.length ? list.map(productCard).join("") : emptyState();
@@ -779,16 +764,25 @@ function initShop() {
     render();
   };
 
-  chips.addEventListener("click", (e) => {
-    const chip = e.target.closest(".chip");
-    if (chip) setCat(chip.dataset.cat);
+  // Sur la boutique, la rangée de catégories filtre sans recharger la page
+  $(".cat-nav").addEventListener("click", (e) => {
+    const link = e.target.closest("[data-nav-cat]");
+    if (!link || link.dataset.navCat === "home") return;
+    e.preventDefault();
+    setCat(link.dataset.navCat);
   });
   grid.addEventListener("click", (e) => {
     const go = e.target.closest("[data-cat-go]");
     if (go) setCat(go.dataset.catGo);
   });
-  $("#search").addEventListener("input", (e) => {
-    state.q = e.target.value;
+  // La barre de recherche de l'en-tête filtre en direct
+  search.closest("form").addEventListener("submit", (e) => e.preventDefault());
+  search.addEventListener("input", () => {
+    state.q = search.value;
+    const url = new URL(location);
+    if (state.q.trim()) url.searchParams.set("q", state.q.trim());
+    else url.searchParams.delete("q");
+    history.replaceState(null, "", url);
     render();
   });
   $("#sort").addEventListener("change", (e) => {
@@ -796,7 +790,6 @@ function initShop() {
     render();
   });
   document.addEventListener("favs:change", () => state.cat === "favs" && render());
-  if (location.hash === "#search") $("#search").focus();
   render();
 }
 
@@ -810,6 +803,8 @@ function initProductPage() {
   const stock = availability(p);
   const hasGuide = p.sizes && SIZE_GUIDES[p.category];
   document.title = `${p.name} | ${STORE.name}`;
+  // Dans la rangée de catégories, on surligne le rayon du produit
+  $$("[data-nav-cat]").forEach((a) => a.classList.toggle("active", a.dataset.navCat === p.category));
 
   el.innerHTML = `
     <div class="pd-gallery">
@@ -967,13 +962,28 @@ function initProductPage() {
   updateWa();
 }
 
-// ===== Accueil : compteurs =====
-function renderCategoryCounts() {
-  $$("[data-total-count]").forEach((el) => (el.textContent = PRODUCTS.length));
-  $$("[data-cat-count]").forEach((el) => {
-    const n = PRODUCTS.filter((p) => p.category === el.dataset.catCount).length;
-    el.textContent = n ? `${n} article${n > 1 ? "s" : ""}` : "";
-  });
+// ===== Accueil : rayons (avec vos propres photos produits) =====
+function renderCategoryBlocks() {
+  const el = $("#category-blocks");
+  if (!el) return;
+  const colors = { chaussures: "yellow", vetements: "sky", accessoires: "orange", electronique: "teal" };
+  el.innerHTML = Object.entries(CATEGORIES)
+    .map(([key, label]) => {
+      const items = PRODUCTS.filter((p) => p.category === key);
+      const thumbs = items.slice(0, 3);
+      return `
+      <a href="shop.html?cat=${key}" class="category cat-${colors[key] || "yellow"} reveal">
+        <div class="category-text">
+          <h3>${label}</h3>
+          <span>${items.length} article${items.length > 1 ? "s" : ""}</span>
+        </div>
+        <div class="category-thumbs" aria-hidden="true">
+          ${thumbs.map((p) => `<img src="${imgSrc(p.image)}" alt="" loading="lazy" />`).join("")}
+        </div>
+        <span class="go"><i class="fa-solid fa-arrow-right"></i></span>
+      </a>`;
+    })
+    .join("");
 }
 
 // ===== Chargement des photos produit (squelette animé puis fondu) =====
@@ -1014,13 +1024,12 @@ function observeReveal() {
 
 // ===== Démarrage =====
 renderHeader();
-renderBottomNav();
 renderFooter();
 renderCartDrawer();
 renderProductGrids();
 renderFaq();
 renderReviews();
-renderCategoryCounts();
+renderCategoryBlocks();
 initShop();
 initProductPage();
 updateCounts();

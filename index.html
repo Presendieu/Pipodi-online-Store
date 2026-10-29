@@ -8,7 +8,7 @@
     <meta property="og:title" content="Pipodi Store" />
     <meta property="og:description" content="Mode, chaussures, accessoires et électronique livrés partout en Haïti." />
     <meta property="og:image" content="img/logo.png" />
-    <meta name="theme-color" content="#0b4a5e" />
+    <meta name="theme-color" content="#f8cf2c" />
     <link rel="icon" href="img/logo.png" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" referrerpolicy="no-referrer" />
     <script>
@@ -26,194 +26,109 @@
     <header id="site-header"></header>
 
     <main>
-      <section class="container hero-bento">
-        <div class="bento-main reveal">
-          <div class="bento-main-text">
-            <span class="pill"><span class="pill-dot"></span> Nouvelle collection</span>
-            <h1 class="hero-title">Tout ce que vous aimez, <span class="accent">livré chez vous.</span></h1>
-            <p>Mode, sneakers, accessoires et électronique des marques que vous aimez. Commandez en quelques clics, on s'occupe du reste.</p>
+      <!-- En-tête de l'accueil : texte + collage de vos produits -->
+      <section class="hero">
+        <div class="container hero-grid">
+          <div class="hero-text">
+            <span class="sticker sticker-sky">Livré partout en Haïti</span>
+            <h1 class="hero-title">Tout ce que vous aimez, <mark>livré</mark> chez vous.</h1>
+            <p>Sneakers, mode, accessoires et électronique. Vous choisissez, vous commandez sur WhatsApp, on vous livre.</p>
             <div class="hero-actions">
-              <a href="shop.html" class="btn btn-primary">Découvrir la boutique <i class="fa-solid fa-arrow-right"></i></a>
-              <a href="#nouveautes" class="btn btn-ghost">Nouveautés</a>
+              <a href="shop.html" class="btn btn-primary">Voir la boutique <i class="fa-solid fa-arrow-right"></i></a>
+              <a href="#comment-commander" class="btn btn-secondary">Comment ça marche ?</a>
             </div>
           </div>
-          <img class="bento-main-img" src="img/hero.webp" alt="" />
+          <div class="hero-collage" aria-hidden="true">
+            <a href="sproduct.html?id=nike-dunk-panda" class="polaroid p1"><img src="img/Nike.jpg" alt="" /><span>Nike Dunk</span></a>
+            <a href="sproduct.html?id=airpods-max" class="polaroid p2"><img src="img/APPLE%20AirPods%20Max%20Argent%20-%20Casque.jpg" alt="" /><span>AirPods Max</span></a>
+            <a href="sproduct.html?id=sac-kate-spade" class="polaroid p3"><img src="img/bag.jpg" alt="" /><span>Kate Spade</span></a>
+            <a href="sproduct.html?id=yeezy-750-white" class="polaroid p4"><img src="img/White%20Yeezy.jpg" alt="" /><span>Yeezy 750</span></a>
+            <span class="burst">NEW</span>
+          </div>
         </div>
-
-        <a href="shop.html?cat=chaussures" class="bento-card bento-photo reveal">
-          <img src="img/Nike.jpg" alt="" />
-          <span class="bento-label">Sneakers <i class="fa-solid fa-arrow-right"></i></span>
-        </a>
-
-        <a href="shop.html?cat=electronique" class="bento-card bento-photo reveal">
-          <img src="img/APPLE%20AirPods%20Max%20Argent%20-%20Casque.jpg" alt="" />
-          <span class="bento-label">Tech <i class="fa-solid fa-arrow-right"></i></span>
-        </a>
-
-        <a href="https://wa.me/50948262051?text=Bonjour%20Pipodi%20Store%20%F0%9F%91%8B" target="_blank" rel="noopener" class="bento-card bento-wa reveal">
-          <span class="bento-wa-icon"><i class="fa-brands fa-whatsapp"></i></span>
-          <span>
-            <strong>Commandez sur WhatsApp</strong>
-            <small>Une question ? Un article Shein ou Amazon ? On répond vite.</small>
-          </span>
-          <i class="fa-solid fa-arrow-right bento-wa-go"></i>
-        </a>
       </section>
 
-      <div class="container">
-        <div class="perks">
-          <div class="perk reveal"><i class="fa-solid fa-truck-fast"></i><div><strong>Livraison</strong><span>Partout en Haïti</span></div></div>
-          <div class="perk reveal"><i class="fa-solid fa-shield-halved"></i><div><strong>Qualité vérifiée</strong><span>Avant chaque livraison</span></div></div>
-          <div class="perk reveal"><i class="fa-solid fa-mobile-screen"></i><div><strong>Paiement simple</strong><span>Mobile ou espèces</span></div></div>
-          <div class="perk reveal"><i class="fa-brands fa-whatsapp"></i><div><strong>Support WhatsApp</strong><span>Réponse rapide</span></div></div>
+      <!-- Bandeau défilant -->
+      <div class="ticker" aria-hidden="true">
+        <div class="ticker-track">
+          <span>Livraison partout en Haïti</span><span>Commande sur WhatsApp</span><span>Paiement MonCash · NatCash · espèces</span><span>On commande pour vous sur Shein, Amazon, Zara</span>
+          <span>Livraison partout en Haïti</span><span>Commande sur WhatsApp</span><span>Paiement MonCash · NatCash · espèces</span><span>On commande pour vous sur Shein, Amazon, Zara</span>
         </div>
       </div>
 
       <section class="section container">
         <div class="section-head">
-          <div>
-            <span class="eyebrow">Catégories</span>
-            <h2>Achetez par catégorie</h2>
-          </div>
+          <h2>Les rayons</h2>
           <a href="shop.html" class="link-arrow">Tout voir <i class="fa-solid fa-arrow-right"></i></a>
         </div>
-        <div class="categories">
-          <a href="shop.html?cat=chaussures" class="category reveal">
-            <img src="img/Nike.jpg" alt="" loading="lazy" />
-            <div><h3>Chaussures</h3><span>Sneakers, sandales…</span><small class="count-pill" data-cat-count="chaussures"></small></div>
-            <span class="go"><i class="fa-solid fa-arrow-right"></i></span>
-          </a>
-          <a href="shop.html?cat=vetements" class="category reveal">
-            <img src="img/banner/b10.jpg" alt="" loading="lazy" />
-            <div><h3>Vêtements</h3><span>T-shirts, chemises, vestes</span><small class="count-pill" data-cat-count="vetements"></small></div>
-            <span class="go"><i class="fa-solid fa-arrow-right"></i></span>
-          </a>
-          <a href="shop.html?cat=accessoires" class="category reveal">
-            <img src="img/banner/b7.jpg" alt="" loading="lazy" />
-            <div><h3>Accessoires</h3><span>Sacs, bijoux, coques</span><small class="count-pill" data-cat-count="accessoires"></small></div>
-            <span class="go"><i class="fa-solid fa-arrow-right"></i></span>
-          </a>
-          <a href="shop.html?cat=electronique" class="category reveal">
-            <img src="img/APPLE%20AirPods%20Max%20Argent%20-%20Casque.jpg" alt="" loading="lazy" />
-            <div><h3>Électronique</h3><span>Audio, chargeurs, PC</span><small class="count-pill" data-cat-count="electronique"></small></div>
-            <span class="go"><i class="fa-solid fa-arrow-right"></i></span>
-          </a>
-        </div>
-      </section>
-
-      <section class="section section-soft">
-        <div class="container">
-          <div class="section-head">
-            <div>
-              <span class="eyebrow">Sélection</span>
-              <h2>Produits vedettes</h2>
-              <p>Les incontournables du moment, choisis pour vous.</p>
-            </div>
-            <a href="shop.html" class="link-arrow">Voir la boutique <i class="fa-solid fa-arrow-right"></i></a>
-          </div>
-          <div class="product-grid product-row" data-products="featured" data-limit="8"></div>
-        </div>
+        <!-- Blocs générés à partir de vos produits (script.js) -->
+        <div class="categories" id="category-blocks"></div>
       </section>
 
       <section class="section container">
-        <div class="promo reveal">
+        <div class="section-head">
+          <h2>Les incontournables</h2>
+          <a href="shop.html" class="link-arrow">Voir la boutique <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+        <div class="product-grid product-row" data-products="featured" data-limit="8"></div>
+      </section>
+
+      <section class="section container">
+        <div class="promo">
           <div class="promo-content">
-            <span class="eyebrow">Service de commande</span>
-            <h2>Vous avez vu un article sur Shein, Amazon ou Zara ?</h2>
-            <p>Envoyez-nous le lien : nous le commandons pour vous et vous le livrons en Haïti. Simple, rapide et sans carte bancaire internationale.</p>
-            <a href="https://wa.me/50948262051?text=Bonjour%2C%20je%20voudrais%20commander%20cet%20article%20%3A%20" target="_blank" rel="noopener" class="btn btn-light"><i class="fa-brands fa-whatsapp"></i> Envoyer un lien</a>
+            <span class="sticker sticker-yellow">Service de commande</span>
+            <h2>Vu sur Shein, Amazon ou Zara&nbsp;? On vous l'apporte.</h2>
+            <p>Envoyez-nous le lien de l'article : on le commande pour vous et on le livre en Haïti. Pas besoin de carte bancaire internationale.</p>
+            <a href="https://wa.me/50948262051?text=Bonjour%2C%20je%20voudrais%20commander%20cet%20article%20%3A%20" target="_blank" rel="noopener" class="btn btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Envoyer un lien</a>
           </div>
+          <ul class="sources">
+            <li>SHEIN</li><li>amazon</li><li>ZARA</li><li>eBay</li><li>Alibaba</li><li>ROMWE</li>
+          </ul>
         </div>
       </section>
 
       <section class="section container" id="nouveautes">
         <div class="section-head">
-          <div>
-            <span class="eyebrow">Tout juste arrivés</span>
-            <h2>Nouveautés</h2>
-          </div>
+          <h2>Nouveautés</h2>
           <a href="shop.html" class="link-arrow">Tout voir <i class="fa-solid fa-arrow-right"></i></a>
         </div>
         <div class="product-grid product-row" data-products="new" data-limit="8"></div>
       </section>
 
-      <section class="section section-soft" id="comment-commander">
-        <div class="container">
-          <div class="section-head section-head-center">
-            <div>
-              <span class="eyebrow">Simple & rapide</span>
-              <h2>Comment commander ?</h2>
-              <p>Trois étapes, sans carte bancaire ni compte à créer.</p>
-            </div>
-          </div>
-          <ol class="steps">
-            <li class="step reveal">
-              <span class="step-num">1</span>
-              <i class="fa-solid fa-bag-shopping"></i>
-              <h3>Choisissez vos articles</h3>
-              <p>Ajoutez au panier vos coups de cœur : taille, couleur, quantité.</p>
-            </li>
-            <li class="step reveal">
-              <span class="step-num">2</span>
-              <i class="fa-brands fa-whatsapp"></i>
-              <h3>Envoyez sur WhatsApp</h3>
-              <p>Votre commande part en un clic. Nous confirmons le prix, la livraison et le paiement.</p>
-            </li>
-            <li class="step reveal">
-              <span class="step-num">3</span>
-              <i class="fa-solid fa-truck-fast"></i>
-              <h3>Recevez chez vous</h3>
-              <p>Nous livrons à votre porte. Vous payez par mobile ou en espèces.</p>
-            </li>
-          </ol>
+      <section class="section container" id="comment-commander">
+        <div class="section-head">
+          <h2>Comment commander&nbsp;?</h2>
         </div>
+        <ol class="steps">
+          <li class="step step-sky reveal">
+            <span class="step-num">1</span>
+            <h3>Choisissez</h3>
+            <p>Ajoutez vos coups de cœur au panier : taille, couleur, quantité.</p>
+          </li>
+          <li class="step step-yellow reveal">
+            <span class="step-num">2</span>
+            <h3>Envoyez sur WhatsApp</h3>
+            <p>Votre commande part en un clic. On confirme le prix, la livraison et le paiement.</p>
+          </li>
+          <li class="step step-orange reveal">
+            <span class="step-num">3</span>
+            <h3>Recevez chez vous</h3>
+            <p>On livre à votre porte. Vous payez par mobile ou en espèces.</p>
+          </li>
+        </ol>
       </section>
 
       <section class="section container" id="avis" hidden>
         <div class="section-head">
-          <div>
-            <span class="eyebrow">Ils nous font confiance</span>
-            <h2>Avis clients</h2>
-          </div>
+          <h2>Ils nous font confiance</h2>
         </div>
         <div class="reviews" id="reviews-list"></div>
       </section>
 
-      <section class="section section-soft">
-        <div class="container">
-          <div class="section-head">
-            <div>
-              <span class="eyebrow">Nos sources</span>
-              <h2>Nous commandons sur les plus grandes plateformes</h2>
-            </div>
-          </div>
-        </div>
-        <div class="brands">
-          <div class="brands-track">
-            <div class="brand-logo"><img src="img/Zara%20Branding.jpg" alt="Zara" /></div>
-            <div class="brand-logo"><img src="img/Amazon.jpg" alt="Amazon" /></div>
-            <div class="brand-logo"><img src="img/Shein%20Logo.jpg" alt="Shein" /></div>
-            <div class="brand-logo"><img src="img/Alibaba.jpg" alt="Alibaba" /></div>
-            <div class="brand-logo"><img src="img/Ebay.jpg" alt="eBay" /></div>
-            <div class="brand-logo"><img src="img/Romwe.jpg" alt="Romwe" /></div>
-            <div class="brand-logo"><img src="img/Adidas.jpg" alt="Adidas" /></div>
-            <!-- copie pour un défilement continu -->
-            <div class="brand-logo" aria-hidden="true"><img src="img/Zara%20Branding.jpg" alt="" /></div>
-            <div class="brand-logo" aria-hidden="true"><img src="img/Amazon.jpg" alt="" /></div>
-            <div class="brand-logo" aria-hidden="true"><img src="img/Shein%20Logo.jpg" alt="" /></div>
-            <div class="brand-logo" aria-hidden="true"><img src="img/Alibaba.jpg" alt="" /></div>
-            <div class="brand-logo" aria-hidden="true"><img src="img/Ebay.jpg" alt="" /></div>
-            <div class="brand-logo" aria-hidden="true"><img src="img/Romwe.jpg" alt="" /></div>
-            <div class="brand-logo" aria-hidden="true"><img src="img/Adidas.jpg" alt="" /></div>
-          </div>
-        </div>
-      </section>
-
       <section class="section container faq" id="faq">
         <div class="faq-intro">
-          <span class="eyebrow">FAQ</span>
           <h2>Questions fréquentes</h2>
-          <p>Vous ne trouvez pas votre réponse ? Écrivez-nous, on répond vite.</p>
+          <p>Pas trouvé votre réponse&nbsp;? Écrivez-nous, on répond vite.</p>
           <a class="btn btn-whatsapp" href="https://wa.me/50948262051?text=Bonjour%20Pipodi%20Store%2C%20j%27ai%20une%20question%20%3A%20" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Poser une question</a>
         </div>
         <div class="faq-list" id="faq-list"></div>
