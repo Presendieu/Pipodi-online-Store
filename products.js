@@ -10,7 +10,7 @@
 // images : ["img/photo2.jpg", "img/photo3.jpg"]  → photos supplémentaires (galerie)
 // colors : ["Noir", "Blanc"]                     → choix de couleur
 // inStock : true                                 → « En stock » (sinon « Sur commande »)
-// cutout : "img/cutouts/xxx.webp"                → photo détourée (sans fond) utilisée dans la vitrine
+// cutout : "img/cutouts/xxx.webp"                → photo détourée (sans fond) utilisée partout sur le site
 
 const PRODUCTS = [
   {
@@ -84,6 +84,7 @@ const PRODUCTS = [
     category: "accessoires",
     price: 12,
     image: "img/Iphone.jpg",
+    cutout: "img/cutouts/coque-iphone.webp",
     tags: ["featured"],
     description:
       "Coque de protection fine et résistante. Précisez votre modèle d'iPhone lors de la commande.",
@@ -106,6 +107,7 @@ const PRODUCTS = [
     category: "chaussures",
     price: 45,
     image: "img/Zara Sandal.jpg",
+    cutout: "img/cutouts/sandales-zara.webp",
     tags: ["featured"],
     sizes: ["36", "37", "38", "39", "40", "41"],
     description: "Sandales au style minimaliste signé Zara.",
@@ -117,6 +119,7 @@ const PRODUCTS = [
     category: "chaussures",
     price: 18,
     image: "img/Sandal kids.jpg",
+    cutout: "img/cutouts/sandales-enfant.webp",
     tags: ["featured"],
     sizes: ["24", "25", "26", "27", "28", "29", "30"],
     description: "Sandales légères et faciles à enfiler pour les petits.",
@@ -128,6 +131,7 @@ const PRODUCTS = [
     category: "accessoires",
     price: 20,
     image: "img/Vinted chapeau.jpg",
+    cutout: "img/cutouts/chapeau.webp",
     tags: ["featured"],
     description: "Le chapeau qui complète une tenue d'été.",
   },
@@ -162,6 +166,7 @@ const PRODUCTS = [
     category: "accessoires",
     price: 45,
     image: "img/Bap.jpg",
+    cutout: "img/cutouts/casquette-bape.webp",
     tags: ["new"],
     description: "Casquette streetwear A Bathing Ape bleu marine, logo brodé. Taille ajustable.",
   },
@@ -182,6 +187,7 @@ const PRODUCTS = [
     category: "chaussures",
     price: 70,
     image: "img/adidas Yeezy Slide _Onyx 2022_2023_ Shoes - Size 16.jpg",
+    cutout: "img/cutouts/yeezy-slide-onyx.webp",
     badge: "Populaire",
     tags: ["new"],
     sizes: ["38", "39", "40", "41", "42", "43", "44", "45"],
@@ -205,6 +211,7 @@ const PRODUCTS = [
     category: "chaussures",
     price: 60,
     image: "img/zara shoes men.jpg",
+    cutout: "img/cutouts/chaussures-homme-zara.webp",
     sizes: ["40", "41", "42", "43", "44", "45"],
     description: "Chaussures homme élégantes pour le travail ou les sorties.",
   },
@@ -235,6 +242,7 @@ const PRODUCTS = [
     category: "vetements",
     price: 55,
     image: "img/veste.jpg",
+    cutout: "img/cutouts/veste.webp",
     sizes: ["S", "M", "L", "XL"],
     description: "Veste légère et stylée pour la mi-saison.",
   },
@@ -245,6 +253,7 @@ const PRODUCTS = [
     category: "vetements",
     price: 38,
     image: "img/Brown sweatshirt.jpg",
+    cutout: "img/cutouts/sweat-marron.webp",
     sizes: ["S", "M", "L", "XL"],
     description: "Sweat-shirt doux et chaud, couleur marron tendance.",
   },
@@ -264,6 +273,7 @@ const PRODUCTS = [
     category: "electronique",
     price: 40,
     image: "img/Le convertisseur macbook (Gris foncé).jpg",
+    cutout: "img/cutouts/adaptateur-macbook.webp",
     description: "Hub USB-C gris sidéral : HDMI, USB et lecteur de cartes pour votre MacBook.",
   },
   {
@@ -273,6 +283,7 @@ const PRODUCTS = [
     category: "electronique",
     price: 35,
     image: "img/Clavier PC.jpg",
+    cutout: "img/cutouts/clavier-pc.webp",
     description: "Clavier confortable pour le travail et le jeu.",
   },
   {
@@ -282,6 +293,7 @@ const PRODUCTS = [
     category: "electronique",
     price: 20,
     image: "img/souris sans fil.jpg",
+    cutout: "img/cutouts/souris-sans-fil.webp",
     description: "Souris sans fil ergonomique et silencieuse.",
   },
   {
@@ -291,6 +303,7 @@ const PRODUCTS = [
     category: "accessoires",
     price: 10,
     image: "img/Coque de téléphone aesthetic beige.jpg",
+    cutout: "img/cutouts/coque-beige.webp",
     description: "Coque au style « aesthetic » beige, douce au toucher.",
   },
 ];

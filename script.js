@@ -322,7 +322,8 @@ function glowFor(p, apply) {
       for (let i = 0; i < d.length; i += 4) {
         const max = Math.max(d[i], d[i + 1], d[i + 2]);
         const min = Math.min(d[i], d[i + 1], d[i + 2]);
-        const weight = (max ? (max - min) / max : 0) ** 2 + 0.01; // les pixels colorés comptent plus
+        // les pixels colorés comptent plus, les zones transparentes d'un détourage ne comptent pas
+        const weight = ((max ? (max - min) / max : 0) ** 2 + 0.01) * (d[i + 3] / 255);
         r += d[i] * weight;
         g += d[i + 1] * weight;
         b += d[i + 2] * weight;
@@ -335,7 +336,19 @@ function glowFor(p, apply) {
       // photo illisible (par exemple fichier ouvert en local) : on garde la couleur du rayon
     }
   };
-  im.src = imgSrc(p.image);
+  im.src = imgSrc(p.cutout || p.image);
+}
+
+// Photo d'un produit mise en scène dans son halo, comme dans la vitrine :
+// produit détouré flottant, ou photo entière (jamais recadrée) avec des bords flous.
+function stageContent(p, { loading = "lazy", id = "" } = {}) {
+  const lazy = loading ? `loading="${loading}"` : "";
+  return `
+    <span class="stage-orb" aria-hidden="true"></span>
+    <span class="stage-photo">
+      ${p.cutout ? "" : `<img class="stage-blur" src="${imgSrc(p.image)}" alt="" aria-hidden="true" ${lazy} />`}
+      <img class="stage-img" ${id ? `id="${id}"` : ""} src="${imgSrc(p.cutout || p.image)}" alt="${id ? p.name : ""}" ${lazy} />
+    </span>`;
 }
 
 // ===== Favoris =====
@@ -425,7 +438,7 @@ function flyToCart(img) {
   document.body.appendChild(clone);
   const dx = to.left + to.width / 2 - (from.left + from.width / 2);
   const dy = to.top + to.height / 2 - (from.top + from.height / 2);
-  return clone
+  const flight = clone
     .animate(
       [
         { transform: "translate(0, 0) scale(1)", opacity: 1 },
@@ -434,8 +447,9 @@ function flyToCart(img) {
       ],
       { duration: 700, easing: "cubic-bezier(0.5, 0, 0.3, 1)" }
     )
-    .finished.catch(() => {})
-    .then(() => clone.remove());
+    .finished.catch(() => {});
+  // Le panier s'ouvre dans tous les cas, même si l'animation ne se termine pas
+  return Promise.race([flight, new Promise((done) => setTimeout(done, 900))]).then(() => clone.remove());
 }
 
 function updateCounts() {
@@ -525,7 +539,7 @@ function fillCartDrawer() {
       const meta = [p.brand, i.color, i.size && `Taille ${i.size}`].filter(Boolean).join(" · ");
       return `
       <div class="cart-item">
-        <a href="sproduct.html?id=${p.id}"><img src="${imgSrc(p.image)}" alt="${p.name}" /></a>
+        <a href="sproduct.html?id=${p.id}" class="cart-thumb"><img src="${imgSrc(p.cutout || p.image)}" alt="${p.name}" /></a>
         <div class="ci-info">
           <a href="sproduct.html?id=${p.id}" class="ci-name">${p.name}</a>
           <span class="ci-meta">${meta}</span>
@@ -588,10 +602,10 @@ function showToast(html, action) {
 function productCard(p) {
   const badgeClass = { Promo: "badge-promo", Nouveau: "badge-new" }[p.badge] || "";
   return `
-    <article class="product-card reveal" style="--glow: ${p.glow || CATEGORY_GLOW[p.category] || "#f37421"}">
-      <div class="product-media">
+    <article class="product-card reveal" data-id="${p.id}" style="--glow: ${p.glow || glowCache[p.id] || CATEGORY_GLOW[p.category] || "#f37421"}">
+      <div class="product-media stage ${p.cutout ? "is-cutout" : ""}">
         <a href="sproduct.html?id=${p.id}" tabindex="-1" aria-hidden="true">
-          <img src="${imgSrc(p.image)}" alt="" loading="lazy" />
+          ${stageContent(p)}
         </a>
         ${p.badge ? `<span class="badge ${badgeClass}">${p.badge}</span>` : ""}
         ${favButton(p.id)}
@@ -707,7 +721,7 @@ document.addEventListener("click", (e) => {
   // Transition entre pages : la photo de la carte s'agrandit vers la fiche produit
   const productLink = e.target.closest('a[href^="sproduct.html"]');
   if (productLink) {
-    const img = productLink.closest(".product-card, .cart-item")?.querySelector("img");
+    const img = productLink.closest(".product-card, .cart-item")?.querySelector(".stage-img, .cart-thumb img");
     if (img) {
       $$("[style*='view-transition-name']").forEach((el) => (el.style.viewTransitionName = ""));
       const main = $("#pd-main");
@@ -736,7 +750,7 @@ document.addEventListener("click", (e) => {
     const p = getProduct(add.dataset.add);
     // Les produits avec tailles ou couleurs passent par la fiche produit pour faire le choix
     if ((p.sizes && p.sizes.length) || (p.colors && p.colors.length)) location.href = `sproduct.html?id=${p.id}`;
-    else addToCart(p.id, 1, null, null, add.closest(".product-card")?.querySelector(".product-media img"));
+    else addToCart(p.id, 1, null, null, add.closest(".product-card")?.querySelector(".stage-img"));
   }
 });
 
@@ -822,7 +836,7 @@ function initProductPage() {
   if (!el) return;
 
   const p = getProduct(params.get("id")) || PRODUCTS[0];
-  const photos = [p.image, ...(p.images || [])];
+  const photos = [...(p.cutout ? [p.cutout] : []), p.image, ...(p.images || [])];
   const stock = availability(p);
   const hasGuide = p.sizes && SIZE_GUIDES[p.category];
   document.title = `${p.name} | ${STORE.name}`;
@@ -832,8 +846,12 @@ function initProductPage() {
 
   el.innerHTML = `
     <div class="pd-gallery">
-      <div class="pd-media">
-        <img src="${imgSrc(photos[0])}" alt="${p.name}" id="pd-main" />
+      <div class="pd-media stage ${p.cutout ? "is-cutout" : ""}" id="pd-stage">
+        <span class="stage-orb" aria-hidden="true"></span>
+        <span class="stage-photo">
+          <img class="stage-blur" id="pd-blur" src="${imgSrc(p.image)}" alt="" aria-hidden="true" />
+          <img class="stage-img" id="pd-main" src="${imgSrc(photos[0])}" alt="${p.name}" />
+        </span>
         ${p.badge ? `<span class="badge">${p.badge}</span>` : ""}
         ${favButton(p.id, "fav-btn-lg")}
       </div>
@@ -954,7 +972,10 @@ function initProductPage() {
   );
   $$("[data-photo]", el).forEach((b) =>
     b.addEventListener("click", () => {
+      const isCutout = Boolean(p.cutout) && b === $(".pd-thumb", el);
       $("#pd-main").src = b.dataset.photo;
+      if (!isCutout) $("#pd-blur").src = b.dataset.photo;
+      $("#pd-stage").classList.toggle("is-cutout", isCutout);
       $$(".pd-thumb", el).forEach((x) => x.classList.toggle("active", x === b));
     })
   );
@@ -1001,7 +1022,7 @@ function initVitrine() {
   thumbs.innerHTML = list
     .map(
       (p, i) =>
-        `<button class="v-thumb" role="tab" data-i="${i}" aria-selected="false"><img src="${imgSrc(p.image)}" alt="" />${p.name}</button>`
+        `<button class="v-thumb" role="tab" data-i="${i}" aria-selected="false"><img src="${imgSrc(p.cutout || p.image)}" alt="" />${p.name}</button>`
     )
     .join("");
 
@@ -1078,7 +1099,7 @@ function renderCategoryBlocks() {
           <span>${items.length} article${items.length > 1 ? "s" : ""}</span>
         </div>
         <div class="category-thumbs" aria-hidden="true">
-          ${thumbs.map((p) => `<img src="${imgSrc(p.image)}" alt="" loading="lazy" />`).join("")}
+          ${thumbs.map((p) => `<img src="${imgSrc(p.cutout || p.image)}" alt="" loading="lazy" />`).join("")}
         </div>
         <span class="go"><i class="fa-solid fa-arrow-right"></i></span>
       </a>`;
@@ -1087,7 +1108,14 @@ function renderCategoryBlocks() {
 }
 
 // ===== Chargement des photos produit (squelette animé puis fondu) =====
-const markLoaded = (img) => img.classList.add("loaded");
+const markLoaded = (img) => {
+  img.classList.add("loaded");
+  const card = img.closest(".product-card");
+  if (card && img.matches(".stage-img") && !card.dataset.glowDone) {
+    card.dataset.glowDone = "1";
+    glowFor(getProduct(card.dataset.id), (c) => card.style.setProperty("--glow", c));
+  }
+};
 document.addEventListener(
   "load",
   (e) => e.target.matches?.(".product-media img") && markLoaded(e.target),

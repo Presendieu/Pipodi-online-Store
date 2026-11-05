@@ -584,8 +584,9 @@ h4 {
 .v-thumb img {
   width: 40px;
   height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
+  border-radius: 12px;
+  object-fit: contain;
+  background: var(--surface-2);
 }
 .v-thumb:hover {
   background: rgba(255, 255, 255, 0.09);
@@ -640,10 +641,11 @@ h4 {
 .category-thumbs img {
   width: 76px;
   height: 76px;
-  margin-right: -18px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid var(--surface);
+  margin-right: -14px;
+  border-radius: 16px;
+  object-fit: contain;
+  background: var(--surface-2);
+  border: 2px solid var(--surface);
   transition: transform 0.35s var(--ease);
 }
 .category:hover .category-thumbs img:nth-child(1) {
@@ -673,6 +675,74 @@ h4 {
   rotate: -45deg;
 }
 
+/* ===== Mise en scène des photos : le même halo partout (cartes, fiche produit) ===== */
+.stage {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--glow) 34%, transparent), transparent 72%),
+    var(--surface-2);
+}
+.stage-orb {
+  position: absolute;
+  inset: 9%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 30%,
+    color-mix(in srgb, var(--glow) 72%, #fff 10%),
+    color-mix(in srgb, var(--glow) 34%, transparent) 56%,
+    transparent 72%
+  );
+  transition: background 0.6s;
+}
+/* Photo normale : affichée entière, jamais recadrée, bords remplis par la même photo floutée */
+.stage-photo {
+  position: relative;
+  display: block;
+  width: 84%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 14px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+  transition: transform 0.5s var(--ease);
+}
+.stage-blur {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(18px) saturate(1.2) brightness(0.8);
+  transform: scale(1.25);
+}
+.stage-img {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+/* Produit détouré : il flotte seul devant le halo */
+.stage.is-cutout .stage-photo {
+  width: 92%;
+  overflow: visible;
+  border-radius: 0;
+  box-shadow: none;
+}
+.stage.is-cutout .stage-blur {
+  display: none;
+}
+.stage.is-cutout .stage-img {
+  filter: drop-shadow(0 18px 18px rgba(0, 0, 0, 0.5));
+}
+.pd-media .stage-photo {
+  border-radius: 22px;
+}
+
 /* ===== Cartes produit ===== */
 .product-grid {
   display: grid;
@@ -698,32 +768,16 @@ h4 {
 }
 .product-media {
   position: relative;
-  aspect-ratio: 1;
   border-radius: 14px;
-  overflow: hidden;
-  background: linear-gradient(100deg, var(--surface-2) 30%, #26262e 50%, var(--surface-2) 70%) 0 0 / 200% 100%;
-  animation: shimmer 1.4s linear infinite;
-}
-.product-media:has(img.loaded) {
-  animation: none;
 }
 .product-media > a {
-  display: block;
-  height: 100%;
-}
-.product-media img {
+  display: grid;
+  place-items: center;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s var(--ease);
 }
-.product-card:hover .product-media img {
-  transform: scale(1.06);
-}
-@keyframes shimmer {
-  to {
-    background-position: -200% 0;
-  }
+.product-card:hover .stage-photo {
+  transform: scale(1.05);
 }
 .badge {
   position: absolute;
@@ -1113,19 +1167,11 @@ h4 {
 }
 .pd-media {
   position: relative;
-  aspect-ratio: 1;
   border-radius: var(--radius-xl);
-  overflow: hidden;
-  background: var(--surface);
   box-shadow:
     0 0 0 1px var(--line),
-    0 40px 100px color-mix(in srgb, var(--glow) 35%, transparent);
+    0 40px 100px color-mix(in srgb, var(--glow) 28%, transparent);
   transition: box-shadow 0.8s;
-}
-.pd-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 .pd-thumbs {
   display: flex;
@@ -1150,7 +1196,7 @@ h4 {
 .pd-thumb img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 .pd-thumb:hover,
 .pd-thumb.active {
@@ -1330,7 +1376,7 @@ h4 {
 }
 .pd-actions .btn {
   flex: 1;
-  min-width: 210px;
+  min-width: 270px;
 }
 /* Sur la fiche produit, le bouton principal est blanc comme dans la vitrine */
 .pd-actions .btn-primary {
@@ -1514,10 +1560,14 @@ h4 {
   background: var(--surface);
 }
 .cart-item img {
+  display: block;
   width: 76px;
   height: 76px;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 12px;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.1), transparent 70%),
+    var(--surface-2);
 }
 .ci-info {
   display: flex;
